@@ -47,7 +47,7 @@ int main()
 
     // build and compile our shader program
     // ------------------------------------
-    Shader ourShader("/home/yrxns/Desktop/OpenGL/assets/vertex.glsl", "/home/yrxns/Desktop/OpenGL/assets/fragment.glsl"); // you can name your shader files however you like
+    Shader ourShader("/home/yrxns/Desktop/OpenGL/examples/03_shader_class/shader/vertex.glsl", "/home/yrxns/Desktop/OpenGL/examples/03_shader_class/shader/fragment.glsl"); // you can name your shader files however you like
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -86,7 +86,6 @@ int main()
         // input
         // -----
         processInput(window);
-        
 
         // render
         // ------

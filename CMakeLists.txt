@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
+project(demo)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -39,11 +40,18 @@ add_subdirectory(glad)
 # target_link_libraries(02_hello_triangle PUBLIC glfw)
 # target_link_libraries(02_hello_triangle PUBLIC glad)
 
+# 03_shader_class
+aux_source_directory(./examples/03_shader_class DIR_SRCS)
+add_executable (03_shader_class ${DIR_SRCS})
+target_link_libraries(03_shader_class PUBLIC glm)
+target_link_libraries(03_shader_class PUBLIC glfw)
+target_link_libraries(03_shader_class PUBLIC glad)
+
 # 
-aux_source_directory(./src DIR_SRCS)
-add_executable (test ${DIR_SRCS})
-target_link_libraries(test PUBLIC glm)
-target_link_libraries(test PUBLIC glfw)
-target_link_libraries(test PUBLIC glad)
+# aux_source_directory(./src DIR_SRCS)
+# add_executable (test ${DIR_SRCS})
+# target_link_libraries(test PUBLIC glm)
+# target_link_libraries(test PUBLIC glfw)
+# target_link_libraries(test PUBLIC glad)
 
 # target_compile_definitions(${PROJECT_NAME} PUBLIC -DOPENGLTUTOR_HOME=\"${CMAKE_CURRENT_SOURCE_DIR}/\")

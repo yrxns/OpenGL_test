@@ -33,10 +33,17 @@ add_subdirectory(glad)
 
 
 # 02_hello_triangle
-aux_source_directory(./examples/02_hello_triangle DIR_SRCS)
-add_executable (02_hello_triangle ${DIR_SRCS})
-target_link_libraries(02_hello_triangle PUBLIC glm)
-target_link_libraries(02_hello_triangle PUBLIC glfw)
-target_link_libraries(02_hello_triangle PUBLIC glad)
+# aux_source_directory(./examples/02_hello_triangle DIR_SRCS)
+# add_executable (02_hello_triangle ${DIR_SRCS})
+# target_link_libraries(02_hello_triangle PUBLIC glm)
+# target_link_libraries(02_hello_triangle PUBLIC glfw)
+# target_link_libraries(02_hello_triangle PUBLIC glad)
+
+# 
+aux_source_directory(./src DIR_SRCS)
+add_executable (test ${DIR_SRCS})
+target_link_libraries(test PUBLIC glm)
+target_link_libraries(test PUBLIC glfw)
+target_link_libraries(test PUBLIC glad)
 
 # target_compile_definitions(${PROJECT_NAME} PUBLIC -DOPENGLTUTOR_HOME=\"${CMAKE_CURRENT_SOURCE_DIR}/\")

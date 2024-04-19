@@ -4,6 +4,11 @@ https://learnopengl-cn.github.io/
 
 https://github.com/parallel101/opengltutor
 
+##### 编译安装
+
+[glfw](https://www.glfw.org/)
+
+
 
 ##### 三个对象
 

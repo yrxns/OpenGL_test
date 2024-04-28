@@ -6,7 +6,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-Texture::Texture(const std::string& path, unsigned int unit, Shader *shader, const std::string& sampler2D) {
+Texture::Texture(const std::string& path, unsigned int unit, Shader *shader, const std::string& sampler2D,
+                 int min_filter, int mag_filter, int wrap_s, int wrap_t) {
 	mUnit = unit;
 
 	// 生成纹理
@@ -33,8 +34,8 @@ Texture::Texture(const std::string& path, unsigned int unit, Shader *shader, con
     这样没有任何效果，因为多级渐远纹理主要是使用在纹理被缩小的情况下的：纹理放大不会使用多级渐远纹理，
     为放大过滤设置多级渐远纹理的选项会产生一个GL_INVALID_ENUM错误代码。
     */
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
 
 	// 设置纹理的环绕方式
     /******************************************************
@@ -43,13 +44,14 @@ Texture::Texture(const std::string& path, unsigned int unit, Shader *shader, con
      * @ GL_CLAMP_TO_EDGE   ：纹理坐标会被约束在0到1之间，超出的部分会重复纹理坐标的边缘，产生一种边缘被拉伸的效果。
      * @ GL_CLAMP_TO_BORDER : 超出的坐标为用户指定的边缘颜色。
      *******************************************************/
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//u
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);//v
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s);//u
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t);//v
 
     // 如果设置了GL_CLAMP_TO_BORDER，指定边缘颜色
-    // float borderColor[] = { 1.0f, 0.0f, 0.0f, 0.0f };
-    // glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-
+    if (wrap_s == GL_CLAMP_TO_BORDER || wrap_t == GL_CLAMP_TO_BORDER) {
+        float borderColor[] = { 1.0f, 0.0f, 0.0f, 0.0f };
+        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    }
 
     // 加载并生成纹理
     int channels;

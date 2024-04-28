@@ -7,7 +7,9 @@ class Shader;
 
 class Texture {
 public:
-	Texture(const std::string& path, unsigned int unit, Shader *shader, const std::string& sampler2D);
+	Texture(const std::string& path, unsigned int unit, Shader *shader, const std::string& sampler2D,
+			int min_filter = GL_LINEAR_MIPMAP_LINEAR, int mag_filter = GL_LINEAR,
+			int wrap_s = GL_REPEAT, int wrap_t = GL_REPEAT);
 	~Texture();
 
     void bind();

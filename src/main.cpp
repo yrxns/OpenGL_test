@@ -62,8 +62,8 @@ void prepareShader() {
 }
 
 void prepareTexture() {
-	container = new Texture("../assets/container.png", 0, shader, "texture1");
-	awesomeface = new Texture("../assets/awesomeface.png", 1, shader, "texture2");
+	container = new Texture("../assets/container.png", 0, shader, "texture1", GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
+	awesomeface = new Texture("../assets/awesomeface.png", 1, shader, "texture2", GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_MIRRORED_REPEAT, GL_MIRRORED_REPEAT);
 }
 
 void render() {

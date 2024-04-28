@@ -1,3 +1,5 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include "check_gl.hpp"
 #include <iomanip>
 #include <map>

@@ -1,9 +1,5 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <string>
-
 namespace check_gl {
 const char *opengl_errno_name(GLenum err);
 void opengl_check_error(const char *filename, int lineno, const char *expr);

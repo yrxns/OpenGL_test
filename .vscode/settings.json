@@ -67,6 +67,8 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "fstream": "cpp",
+        "span": "cpp"
     }
 }

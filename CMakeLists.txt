@@ -14,6 +14,13 @@ elseif (CMAKE_COMPILER_IS_GNUCXX)
     endif()
 endif()
 
+#指定编译类型
+set(CMAKE_BUILD_TYPE Debug)      #Debug
+
+# Debug版本，开启调试信息，不进行代码优化
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
+
 set(INCDIRS include)
 
 foreach(incdir ${INCDIRS})

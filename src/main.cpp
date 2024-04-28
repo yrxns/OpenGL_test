@@ -1,11 +1,13 @@
-#include <iostream>
 #include "core.hpp"
+#include <iostream>
 #include "Shader.hpp"
 #include "Application.hpp"
-#include <assert.h>//断言
+#include "VBO.hpp"
+#include "VAO.hpp"
+#include "EBO.hpp"
 
-
-GLuint vao;
+VBO *vbo = nullptr;
+VAO *vao = nullptr;
 Shader* shader = nullptr;
 
 void OnResize(int width, int height) {
@@ -13,38 +15,34 @@ void OnResize(int width, int height) {
 	std::cout << "onResize" << std::endl;
 }
 
-void OnKey(int key, int action, int mods) {
+void OnKey(GLFWwindow *window, int key, int action, int mods) {
 	std::cout << key << std::endl;
+	if (key == 256) {
+		glfwSetWindowShouldClose(window, true);
+	}
 }
 
 void prepareVAO() {
     // 数据
+	float vertices[] = {
+		// 位置              // 颜色
+		0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // 右下
+		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // 左下
+		0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f    // 顶部
+  	}	;
 
-	//2 VBO创建
+	vao = new VAO;
+	vbo = new VBO;
 
-	//3 EBO创建
-
-	//4 VAO创建
+	vao->begin();
+	vbo->setData(vertices);
+	vao->vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+	vao->vertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+	vao->end();
 }
 
 void prepareShader() {
-	shader = new Shader("assets/vertex.glsl","assets/fragment.glsl");
-}
-
-void prepareTexture() {
-	// texture = new Texture("assets/textures/goku.jpg", 0);
-}
-
-void prepareCamera() {
-	//lookat:生成一个viewMatrix
-	//eye:当前摄像机所在的位置
-	//center:当前摄像机看向的那个点
-	//up:穹顶向量
-	// viewMatrix = glm::lookAt(glm::vec3(1.0f,0.0f,1.0f),glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,1.0f,0.0f));
-}
-
-void prepareOrtho() {
-	// orthoMatrix = glm::ortho(-2.0f, 2.0f, -2.0f, 2.0f, 2.0f, -2.0f);
+	shader = new Shader("../assets/vertex.glsl","../assets/fragment.glsl");
 }
 
 void render() {
@@ -53,20 +51,24 @@ void render() {
 
 	//绑定当前的program
 	shader->begin();
-	shader->setInt("sampler", 0);
 
 	//绑定当前的vao
-	CHECK_GL(glBindVertexArray(vao));
+	vao->begin();
 
 	//发出绘制指令
-	CHECK_GL(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0));
-	CHECK_GL(glBindVertexArray(0));
+	CHECK_GL(glDrawArrays(GL_TRIANGLES, 0, 3));
 
+	//解绑当前的vao
+	vao->end();
 	shader->end();
 }
 
 
 int main() {
+	Application *app = Application::getInstance();
+
+	app->glVersionInfo();
+
 	if (!app->init(800, 600)) {
 		return -1;
 	}
@@ -80,14 +82,17 @@ int main() {
 
 	prepareShader();
 	prepareVAO();
-	prepareTexture();
-	prepareCamera();
-	prepareOrtho();
+
+	// 设置线框绘制模式
+  	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	while (app->update()) {
 		render();
 	}
 
+	delete vao;
+	delete vbo;
+	delete shader;
 	app->destroy();
 
 	return 0;

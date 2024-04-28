@@ -1,14 +1,10 @@
 #ifndef __APPLICATION__
 #define __APPLICATION__
 
-#include <iostream>
-
-#define app Application::getInstance()
-
 class GLFWwindow;
 
 using ResizeCallback = void(*)(int width, int height);
-using KeyBoardCallback = void(*)(int key, int action, int mods);
+using KeyBoardCallback = void(*)(GLFWwindow *window, int key, int action, int mods);
 
 class Application {
 public:
@@ -23,12 +19,10 @@ public:
 
 	void destroy();
 
-
-	uint32_t getWidth()const { return mWidth; }
-	uint32_t getHeight()const { return mHeight; }
-
 	void setResizeCallback(ResizeCallback callback) { mResizeCallback = callback; }
 	void setKeyBoardCallback(KeyBoardCallback callback) { mKeyBoardCallback = callback; }
+
+	static void glVersionInfo(void);
 
 private:
 	//C++类内函数指针
@@ -37,8 +31,6 @@ private:
 
 private:
 
-	uint32_t mWidth{ 0 };
-	uint32_t mHeight{ 0 };
 	GLFWwindow* mWindow{ nullptr };
 
 	ResizeCallback mResizeCallback{ nullptr };

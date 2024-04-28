@@ -91,43 +91,42 @@ void Shader::end() {
 }
 
 void Shader::setFloat(const std::string& name, float value) {
-    //1 通过名称拿到Uniform变量的位置Location
     GLint location = glGetUniformLocation(mProgram, name.c_str());
 
-    //2 通过Location更新Uniform变量的值
     CHECK_GL(glUniform1f(location, value));
 }
 
 void Shader::setVector3(const std::string& name, float x, float y, float z) {
-    //1 通过名称拿到Uniform变量的位置Location
     GLint location = glGetUniformLocation(mProgram, name.c_str());
     
-    //2 通过Location更新Uniform变量的值
     CHECK_GL(glUniform3f(location, x, y, z));
 }
 void Shader::setVector3(const std::string& name, const float* values) {
-    //1 通过名称拿到Uniform变量的位置Location
     GLint location = glGetUniformLocation(mProgram, name.c_str());
 
-    //2 通过Location更新Uniform变量的值
-    //第二个参数：你当前要更新的uniform变量如果是数组，数组里面包括多少个向量vec3
     CHECK_GL(glUniform3fv(location, 1, values));
 }
 
-void Shader::setInt(const std::string& name, int value) {
-    //1 通过名称拿到Uniform变量的位置Location
+void Shader::setVector4(const std::string& name, float x, float y, float z, float w) {
+    GLint location = glGetUniformLocation(mProgram, name.c_str());
+    
+    CHECK_GL(glUniform4f(location, x, y, z, w));
+}
+void Shader::setVector4(const std::string& name, const float* values) {
     GLint location = glGetUniformLocation(mProgram, name.c_str());
 
-    //2 通过Location更新Uniform变量的值
+    CHECK_GL(glUniform4fv(location, 1, values));
+}
+
+void Shader::setInt(const std::string& name, int value) {
+    GLint location = glGetUniformLocation(mProgram, name.c_str());
+
     CHECK_GL(glUniform1i(location, value));
 }
 
 void Shader::setMatrix4x4(const std::string& name, glm::mat4 value) {
-    //1 通过名称拿到Uniform变量的位置Location
     GLint location = glGetUniformLocation(mProgram, name.c_str());
     
-    //2 通过Location更新Uniform变量的值
-    //transpose参数：表示是否对传输进去的矩阵数据进行转置
     CHECK_GL(glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value)));
 }
 

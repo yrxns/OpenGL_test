@@ -30,7 +30,7 @@ bool Application::init(const int& width, const int& height) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	//2 创建窗体对象
-	mWindow = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+	mWindow = glfwCreateWindow(width, height, "LearnOpenGL", NULL, NULL);
 	if (mWindow == nullptr) {
 		std::cout << "Failed to create GLFW window" << std::endl;
 		return false;
@@ -46,6 +46,14 @@ bool Application::init(const int& width, const int& height) {
 
 	// std::cout << "OpenGL version: " << (const char *)glGetString(GL_VERSION) << '\n';
 	glVersionInfo();
+
+	//设置opengl视口以及清理颜色
+	glViewport(0, 0, width, height);
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+	// 设置线框绘制模式
+  	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
 	glfwSetFramebufferSizeCallback(mWindow, frameBufferSizeCallback);
 

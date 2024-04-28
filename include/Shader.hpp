@@ -23,6 +23,10 @@ public:
 	void setInt(const std::string& name, int value);
 
 	void setMatrix4x4(const std::string& name, glm::mat4 value);
+
+	operator GLuint() {
+		return mProgram;
+    }
 private:
 	//shader program
 	//type:COMPILE LINK

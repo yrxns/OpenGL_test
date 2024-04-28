@@ -5,9 +5,11 @@
 #include "VBO.hpp"
 #include "VAO.hpp"
 #include "EBO.hpp"
+#include <vector>
 
 VBO *vbo = nullptr;
 VAO *vao = nullptr;
+EBO *ebo = nullptr;
 Shader* shader = nullptr;
 
 void OnResize(int width, int height) {
@@ -22,22 +24,31 @@ void OnKey(GLFWwindow *window, int key, int action, int mods) {
 	}
 }
 
-void prepareVAO() {
+void prepareData() {
     // 数据
-	float vertices[] = {
-		// 位置              // 颜色
-		0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // 右下
-		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // 左下
-		0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f    // 顶部
-  	}	;
+	std::vector<float> vertices = {
+		0.5f, 0.5f, 0.0f,   // 右上角
+		0.5f, -0.5f, 0.0f,  // 右下角
+		-0.5f, -0.5f, 0.0f, // 左下角
+		-0.5f, 0.5f, 0.0f   // 左上角
+	};
+
+	std::vector<int> indexes = {
+		0, 1, 3, // 第一个三角形
+		1, 2, 3  // 第二个三角形
+	};
 
 	vao = new VAO;
 	vbo = new VBO;
+	ebo = new EBO;
 
 	vao->begin();
-	vbo->setData(vertices);
-	vao->vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
-	vao->vertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+	vbo->bind();
+	ebo->bind();
+	vbo->setData(vertices, GL_STATIC_DRAW);
+	ebo->setData(indexes, GL_STATIC_DRAW);
+	vao->vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	// vao->vertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 	vao->end();
 }
 
@@ -56,7 +67,7 @@ void render() {
 	vao->begin();
 
 	//发出绘制指令
-	CHECK_GL(glDrawArrays(GL_TRIANGLES, 0, 3));
+	CHECK_GL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
 	//解绑当前的vao
 	vao->end();
@@ -66,8 +77,6 @@ void render() {
 
 int main() {
 	Application *app = Application::getInstance();
-
-	app->glVersionInfo();
 
 	if (!app->init(800, 600)) {
 		return -1;
@@ -81,10 +90,11 @@ int main() {
 	CHECK_GL(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 
 	prepareShader();
-	prepareVAO();
+	prepareData();
 
 	// 设置线框绘制模式
-  	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  	// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	while (app->update()) {
 		render();
@@ -92,6 +102,7 @@ int main() {
 
 	delete vao;
 	delete vbo;
+	delete ebo;
 	delete shader;
 	app->destroy();
 

@@ -23,9 +23,6 @@ void VBO::bind() {
  * @ GL_STREAM_DRAW ：数据每次绘制时都会改变。
  *******************************************************/
 // 填充VBO数据
-void VBO::setData(const void *vertices, GLenum usage) {
-    // 绑定VBO
-    bind();
-
-    CHECK_GL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, usage));
+void VBO::setData(const std::vector<float> vertices, GLenum usage) {
+    CHECK_GL(glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), vertices.data(), GL_STATIC_DRAW));
 }

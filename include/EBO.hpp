@@ -2,9 +2,9 @@
 #define __EBO__
 
 #include <atomic>
+#include <vector>
 
-// typedef unsigned int GLenum;
-// #define GL_STATIC_DRAW 0x88E4
+typedef unsigned int GLenum;
 
 class EBO {
 public:
@@ -12,6 +12,7 @@ public:
 
     ~EBO();
 
+    // 绑定EBO
     void bind();
 
     /******************************************************
@@ -21,7 +22,7 @@ public:
      * @ GL_STREAM_DRAW ：数据每次绘制时都会改变。
      *******************************************************/
     // 填充EBO数据
-    void setData(const void *indices, GLenum usage = GL_STATIC_DRAW);
+    void setData(const std::vector<int> indices, GLenum usage);
 
     operator GLuint() {
         return _ebo;

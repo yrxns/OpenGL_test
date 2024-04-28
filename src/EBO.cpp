@@ -23,9 +23,6 @@ void EBO::bind() {
  * @ GL_STREAM_DRAW ：数据每次绘制时都会改变。
  *******************************************************/
 // 填充EBO数据
-void EBO::setData(const void *indices, GLenum usage) {
-    // 绑定EBO
-    bind();
-
-    CHECK_GL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, usage));
+void EBO::setData(const std::vector<int> indices, GLenum usage) {
+    CHECK_GL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * indices.size(), indices.data(), usage));
 }

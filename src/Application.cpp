@@ -43,6 +43,9 @@ bool Application::init(const int& width, const int& height) {
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return false;
 	}
+
+	// std::cout << "OpenGL version: " << (const char *)glGetString(GL_VERSION) << '\n';
+	glVersionInfo();
 	
 	glfwSetFramebufferSizeCallback(mWindow, frameBufferSizeCallback);
 
@@ -97,14 +100,14 @@ void Application::keyCallback(GLFWwindow* window, int key, int scancode, int act
 	}
 }
 
-void Application::glVersionInfo(void) {
-	// const GLubyte* byteGlVersion = glGetString(GL_VERSION);
-	// const GLubyte* byteGlVendor = glGetString(GL_VENDOR);
-	// const GLubyte* byteGlRenderer = glGetString(GL_RENDERER);
-	// const GLubyte* byteSLVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
+void Application::glVersionInfo() {
+	const char* byteGlVersion = (const char *)glGetString(GL_VERSION);
+	const char* byteGlVendor = (const char *)glGetString(GL_VENDOR);
+	const char* byteGlRenderer = (const char *)glGetString(GL_RENDERER);
+	const char* byteSLVersion = (const char *)glGetString(GL_SHADING_LANGUAGE_VERSION);
 
-	// std::cout << "OpenGL version: " << byteGlVersion << std::endl;
-	// std::cout << "GL_VENDOR: " << byteGlVendor << std::endl;
-	// std::cout << "GL_RENDERER: " << byteGlRenderer << std::endl;
-	// std::cout << "GLSL version: : " << byteSLVersion << std::endl;
+	std::cout << "OpenGL version: " << byteGlVersion << std::endl;
+	std::cout << "GL_VENDOR: " << byteGlVendor << std::endl;
+	std::cout << "GL_RENDERER: " << byteGlRenderer << std::endl;
+	std::cout << "GLSL version: : " << byteSLVersion << std::endl;
 }

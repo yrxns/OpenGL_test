@@ -76,7 +76,9 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 }
-Shader::~Shader() {}
+Shader::~Shader() {
+    glDeleteProgram(mProgram);
+}
 
 //开始使用当前Shader
 void Shader::begin() {

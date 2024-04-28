@@ -2,6 +2,9 @@
 #define __VBO__
 
 #include <atomic>
+#include <vector>
+
+typedef unsigned int GLenum;
 
 class VBO {
 public:
@@ -9,6 +12,7 @@ public:
 
     ~VBO();
 
+    // 绑定VBO
     void bind();
 
     /******************************************************
@@ -18,7 +22,7 @@ public:
      * @ GL_STREAM_DRAW ：数据每次绘制时都会改变。
      *******************************************************/
     // 填充VBO数据
-    void setData(const void *vertices, GLenum usage = GL_STATIC_DRAW);
+    void setData(const std::vector<float> vertices, GLenum usage);
 
     operator GLuint() {
         return _vbo;

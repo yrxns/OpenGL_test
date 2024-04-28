@@ -22,7 +22,11 @@ public:
 	void setResizeCallback(ResizeCallback callback) { mResizeCallback = callback; }
 	void setKeyBoardCallback(KeyBoardCallback callback) { mKeyBoardCallback = callback; }
 
-	static void glVersionInfo(void);
+	static void glVersionInfo();
+
+	operator GLFWwindow*() {
+		return mWindow;
+    }
 
 private:
 	//C++类内函数指针

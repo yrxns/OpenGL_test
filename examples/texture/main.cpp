@@ -68,7 +68,7 @@ void prepareTexture() {
 
 void render() {
 	//执行opengl画布清理操作
-	CHECK_GL(glClear(GL_COLOR_BUFFER_BIT));
+	CHECK_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
 	// 绑定纹理
 	container->bind();

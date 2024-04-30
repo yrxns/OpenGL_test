@@ -47,6 +47,9 @@ bool Application::init(const int& width, const int& height) {
 	// std::cout << "OpenGL version: " << (const char *)glGetString(GL_VERSION) << '\n';
 	glVersionInfo();
 
+	// 开启深度测试
+	glEnable(GL_DEPTH_TEST);
+
 	//设置opengl视口以及清理颜色
 	glViewport(0, 0, width, height);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

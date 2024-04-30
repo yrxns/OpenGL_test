@@ -40,6 +40,8 @@ target_link_libraries(main PUBLIC glfw)
 target_link_libraries(main PUBLIC glad)
 
 # examples
+
+### texture
 set(DIR_SRCS "")
 aux_source_directory(./src DIR_SRCS)
 aux_source_directory(./examples/texture DIR_SRCS)
@@ -49,5 +51,15 @@ add_executable (texture ${DIR_SRCS})
 target_link_libraries(texture PUBLIC glm)
 target_link_libraries(texture PUBLIC glfw)
 target_link_libraries(texture PUBLIC glad)
+
+### transform
+set(DIR_SRCS "")
+aux_source_directory(./src DIR_SRCS)
+aux_source_directory(./examples/transform DIR_SRCS)
+list(REMOVE_ITEM DIR_SRCS ./src/main.cpp)
+add_executable (transform ${DIR_SRCS})
+target_link_libraries(transform PUBLIC glm)
+target_link_libraries(transform PUBLIC glfw)
+target_link_libraries(transform PUBLIC glad)
 
 # target_compile_definitions(${PROJECT_NAME} PUBLIC -DOPENGLTUTOR_HOME=\"${CMAKE_CURRENT_SOURCE_DIR}/\")

@@ -97,7 +97,7 @@ void prepareData() {
 }
 
 void prepareShader() {
-	shader = new Shader("../assets/vertex.glsl","../assets/fragment.glsl");
+	shader = new Shader("../examples/transform/shader/vertex.glsl","../examples/transform/shader/fragment.glsl");
 }
 
 void prepareTexture() {

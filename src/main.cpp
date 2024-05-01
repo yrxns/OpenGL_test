@@ -6,6 +6,7 @@
 #include "VAO.hpp"
 #include "EBO.hpp"
 #include "Texture.hpp"
+#include "Camera.hpp"
 #include <vector>
 
 VBO *vbo = nullptr;
@@ -18,6 +19,16 @@ glm::mat4 model(1.0f);
 glm::mat4 view(1.0f);
 glm::mat4 projection(1.0f);
 
+// camera
+Camera *camera = nullptr;
+float lastX = 800 / 2.0f;
+float lastY = 600 / 2.0f;
+bool firstMouse = true;
+
+// timing
+float deltaTime = 0.0f;	// time between current frame and last frame
+float lastFrame = 0.0f;
+
 void OnResize(int width, int height) {
 	CHECK_GL(glViewport(0, 0, width, height));
 	std::cout << "onResize" << std::endl;
@@ -28,6 +39,47 @@ void OnKey(GLFWwindow *window, int key, int action, int mods) {
 	if (key == 256) {
 		glfwSetWindowShouldClose(window, true);
 	}
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera->processKeyboard(Camera_Movement::FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera->processKeyboard(Camera_Movement::BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera->processKeyboard(Camera_Movement::LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera->processKeyboard(Camera_Movement::RIGHT, deltaTime);
+}
+
+void OnMouse(int button, int action, int mods) {
+	std::cout << "鼠标点击：(" << button << ", " << action << ", " << mods << ")" << std::endl;
+}
+
+void OnCursor(double xpos, double ypos) {
+	std::cout << "鼠标移动：(" << xpos << ", " << ypos << ")" << std::endl;
+	float x = static_cast<float>(xpos);
+    float y = static_cast<float>(ypos);
+
+    if (firstMouse)
+    {
+        lastX = x;
+        lastY = y;
+        firstMouse = false;
+    }
+
+    float xoffset = x - lastX;
+    float yoffset = lastY - y; // reversed since y-coordinates go from bottom to top
+
+    lastX = x;
+    lastY = y;
+
+    camera->processMouseMovement(xoffset, yoffset);
+}
+
+void OnScroll(double xoffset, double yoffset) {
+	std::cout << "鼠标滚轮: x offset = " << xoffset << ", y offset = " << yoffset << std::endl;
+	camera->processMouseScroll(static_cast<float>(yoffset));
 }
 
 void prepareData() {
@@ -106,9 +158,7 @@ void prepareTexture() {
 }
 
 void preTransform() {
-	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	projection = glm::perspective(glm::radians(45.0f), 800.0f / 600, 0.1f, 100.0f);
+	camera = new PerspectiveCamera(glm::radians(45.0f), 800.0f / 600, 0.1f, 100.0f);
 }
 
 	glm::vec3 cubePositions[] = {
@@ -124,14 +174,13 @@ void preTransform() {
 		glm::vec3(-1.3f,  1.0f, -1.5f)  
 	};
 
-void doTransform() {
-	// model = glm::mat4(1.0f);
-	// model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-}
-
 void render() {
 	//执行opengl画布清理操作
 	CHECK_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+
+	float currentFrame = static_cast<float>(glfwGetTime());
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
 
 	// 绑定纹理
 	container->bind();
@@ -140,15 +189,16 @@ void render() {
 	//绑定当前的program
 	shader->begin();
 
-	shader->setMatrix4x4("model", model);
-	shader->setMatrix4x4("view", view);
+	projection = camera->getProjectionMatrix();
 	shader->setMatrix4x4("projection", projection);
 	//绑定当前的vao
 	vao->begin();
 
 	//发出绘制指令
 	// CHECK_GL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
-	// doTransform();
+
+	view = camera->getViewMatrix();
+	shader->setMatrix4x4("view", view);
 
 	for(unsigned int i = 0; i < 10; i++) {
 		model = glm::mat4(1.0f);
@@ -175,6 +225,9 @@ int main() {
 
 	app->setResizeCallback(OnResize);
 	app->setKeyBoardCallback(OnKey);
+	app->setMouseCallback(OnMouse);
+	app->setCursorCallback(OnCursor);
+	app->setScrollCallback(OnScroll);
 
 	prepareShader();
 	prepareData();

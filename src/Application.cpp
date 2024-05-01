@@ -66,6 +66,15 @@ bool Application::init(const int& width, const int& height) {
 	//键盘响应
 	glfwSetKeyCallback(mWindow, keyCallback);
 
+	// 鼠标点击事件响应
+	glfwSetMouseButtonCallback(mWindow, mouseCallback);
+
+	// 鼠标移动事件响应
+	glfwSetCursorPosCallback(mWindow, cursorCallback);
+
+	// 鼠标滚轮事件
+	glfwSetScrollCallback(mWindow, scrollCallback);
+
 	return true;
 }
 
@@ -88,6 +97,13 @@ bool Application::update() {
 void Application::destroy() {
 	//退出程序前做相关清理
 	glfwTerminate();
+}
+
+std::pair<double, double> Application::getCursorPosition() {
+	double x{}, y{};
+	glfwGetCursorPos(mWindow, &x, &y);
+
+	return {x, y};
 }
 
 
@@ -121,4 +137,25 @@ void Application::glVersionInfo() {
 	std::cout << "GL_VENDOR: " << byteGlVendor << std::endl;
 	std::cout << "GL_RENDERER: " << byteGlRenderer << std::endl;
 	std::cout << "GLSL version: : " << byteSLVersion << std::endl;
+}
+
+void Application::mouseCallback(GLFWwindow* window, int button, int action, int mods) {
+	Application* self = (Application*)glfwGetWindowUserPointer(window);
+	if (self->mMouseCallback != nullptr) {
+		self->mMouseCallback(button, action, mods);
+	}	
+}
+
+void Application::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
+	Application* self = (Application*)glfwGetWindowUserPointer(window);
+	if (self->mCursorCallback != nullptr) {
+		self->mCursorCallback(xpos, ypos);
+	}
+}
+
+void Application::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+	Application* self = (Application*)glfwGetWindowUserPointer(window);
+	if (self->mScrollCallback != nullptr) {
+		self->mScrollCallback(xoffset, yoffset);
+	}
 }

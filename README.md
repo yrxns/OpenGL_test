@@ -4,6 +4,12 @@ https://learnopengl-cn.github.io/
 
 https://github.com/parallel101/opengltutor
 
+https://docs.gl/
+
+https://threejs.org/
+
+https://github.com/ocornut/imgui
+
 ##### 编译安装
 
 [glfw](https://www.glfw.org/)

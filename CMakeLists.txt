@@ -21,7 +21,7 @@ set(CMAKE_BUILD_TYPE Debug)      #Debug
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
 
-set(INCDIRS include)
+set(INCDIRS include .)
 
 foreach(incdir ${INCDIRS})
     include_directories(${incdir})

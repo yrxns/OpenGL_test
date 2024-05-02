@@ -16,6 +16,10 @@ void VBO::bind() {
     CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, _vbo));
 }
 
+void VBO::unbind() {
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 /******************************************************
  * usage:
  * @ GL_STATIC_DRAW ：数据不会或几乎不会改变。

@@ -1,10 +1,8 @@
 #include "Camera.hpp"
 
-Camera::Camera(glm::vec3 position, glm::vec3 worldUp, float yaw, float pitch) {
+Camera::Camera(glm::vec3 position, glm::vec3 worldUp) {
     mPosition = position;
     mWorldUp = worldUp;
-    this->yaw = yaw;
-    this->pitch = pitch;
     updateCameraVectors();
 }
 
@@ -15,16 +13,16 @@ glm::mat4 Camera::getViewMatrix() {
 }
 
 glm::mat4 Camera::getProjectionMatrix() {
-    return glm::identity<glm::mat4>();
+    // return glm::identity<glm::mat4>();
+    return glm::perspective(glm::radians(mFovy), mAspect, mNear, mFar);
 }
 
 void Camera::processKeyboard(Camera_Movement direction, float deltaTime) {
     float velocity = sensitivity * deltaTime;
-    glm::vec3 front = glm::cross(mUp, mRight);
     if (direction == Camera_Movement::FORWARD)
-        mPosition += front * velocity;
+        mPosition += mFront * velocity;
     if (direction == Camera_Movement::BACKWARD)
-        mPosition -= front * velocity;
+        mPosition -= mFront * velocity;
     if (direction == Camera_Movement::LEFT)
         mPosition -= mRight * velocity;
     if (direction == Camera_Movement::RIGHT)
@@ -52,13 +50,13 @@ void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constr
 }
 
 void Camera::processMouseScroll(float yoffset) {
-    fov -= (float)yoffset;
-    if (fov < 1.0f) {
-        fov = 1.0f;
-    }  
-    if (fov > 45.0f) {
-        fov = 45.0f;
-    }
+    mFovy -= (float)yoffset;
+    // if (mFovy < 1.0f) {
+    //     mFovy = 1.0f;
+    // }  
+    // if (mFovy > 45.0f) {
+    //     mFovy = 45.0f;
+    // }
 }
 
 void Camera::updateCameraVectors() {
@@ -71,32 +69,4 @@ void Camera::updateCameraVectors() {
     // also re-calculate the Right and Up vector
     mRight = glm::normalize(glm::cross(mFront, mWorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
     mUp    = glm::normalize(glm::cross(mRight, mFront));
-}
-
-OrthograhicCamera::OrthograhicCamera(float left, float right, float top, float bottom, float near, float far) {
-    mLeft = left;
-    mRight = right;
-    mTop = top;
-    mBottom = bottom;
-    mNear = near;
-    mFar = far;
-}
-
-OrthograhicCamera::~OrthograhicCamera() {}
-
-glm::mat4 OrthograhicCamera::getProjectionMatrix() {
-    return glm::ortho(mLeft, mRight, mBottom, mTop, mNear, mFar);
-}
-
-PerspectiveCamera::PerspectiveCamera(float fovy, float aspect, float near, float far) {
-    mFovy = fovy;
-    mAspect = aspect;
-    mNear = near;
-    mFar = far;
-}
-
-PerspectiveCamera::~PerspectiveCamera() {}
-
-glm::mat4 PerspectiveCamera::getProjectionMatrix() {
-    return glm::perspective(glm::radians(fov), mAspect, mNear, mFar);
 }

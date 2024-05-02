@@ -16,6 +16,10 @@ void EBO::bind() {
     CHECK_GL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
 }
 
+void EBO::unbind() {
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
 /******************************************************
  * usage:
  * @ GL_STATIC_DRAW ：数据不会或几乎不会改变。

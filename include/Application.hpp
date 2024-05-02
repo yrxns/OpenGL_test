@@ -49,6 +49,8 @@ private:
 
 	GLFWwindow* mWindow{ nullptr };
 
+	float deltaTime{0.0f};		// 帧时间间隔
+
 	ResizeCallback mResizeCallback{ nullptr };
 	KeyBoardCallback mKeyBoardCallback{ nullptr };
 	MouseCallback mMouseCallback{ nullptr };

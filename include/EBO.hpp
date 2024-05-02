@@ -15,6 +15,8 @@ public:
     // 绑定EBO
     void bind();
 
+    void unbind();
+
     /******************************************************
      * usage:
      * @ GL_STATIC_DRAW ：数据不会或几乎不会改变。

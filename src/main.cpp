@@ -21,13 +21,6 @@ glm::mat4 projection(1.0f);
 
 // camera
 Camera *camera = nullptr;
-float lastX = 800 / 2.0f;
-float lastY = 600 / 2.0f;
-bool firstMouse = true;
-
-// timing
-float deltaTime = 0.0f;	// time between current frame and last frame
-float lastFrame = 0.0f;
 
 void OnResize(int width, int height) {
 	CHECK_GL(glViewport(0, 0, width, height));
@@ -43,13 +36,13 @@ void OnKey(GLFWwindow *window, int key, int action, int mods) {
 	glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera->processKeyboard(Camera_Movement::FORWARD, deltaTime);
+        camera->processKeyboard(Camera_Movement::FORWARD, camera->deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera->processKeyboard(Camera_Movement::BACKWARD, deltaTime);
+        camera->processKeyboard(Camera_Movement::BACKWARD, camera->deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera->processKeyboard(Camera_Movement::LEFT, deltaTime);
+        camera->processKeyboard(Camera_Movement::LEFT, camera->deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera->processKeyboard(Camera_Movement::RIGHT, deltaTime);
+        camera->processKeyboard(Camera_Movement::RIGHT, camera->deltaTime);
 }
 
 void OnMouse(int button, int action, int mods) {
@@ -61,18 +54,18 @@ void OnCursor(double xpos, double ypos) {
 	float x = static_cast<float>(xpos);
     float y = static_cast<float>(ypos);
 
-    if (firstMouse)
+    if (camera->firstMouse)
     {
-        lastX = x;
-        lastY = y;
-        firstMouse = false;
+        camera->lastX = x;
+        camera->lastY = y;
+        camera->firstMouse = false;
     }
 
-    float xoffset = x - lastX;
-    float yoffset = lastY - y; // reversed since y-coordinates go from bottom to top
+    float xoffset = x - camera->lastX;
+    float yoffset = camera->lastY - y; // reversed since y-coordinates go from bottom to top
 
-    lastX = x;
-    lastY = y;
+    camera->lastX = x;
+    camera->lastY = y;
 
     camera->processMouseMovement(xoffset, yoffset);
 }
@@ -158,7 +151,7 @@ void prepareTexture() {
 }
 
 void preTransform() {
-	camera = new PerspectiveCamera(glm::radians(45.0f), 800.0f / 600, 0.1f, 100.0f);
+	camera = new Camera();
 }
 
 	glm::vec3 cubePositions[] = {
@@ -178,10 +171,6 @@ void render() {
 	//执行opengl画布清理操作
 	CHECK_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-	float currentFrame = static_cast<float>(glfwGetTime());
-	deltaTime = currentFrame - lastFrame;
-	lastFrame = currentFrame;
-
 	// 绑定纹理
 	container->bind();
 	awesomeface->bind();
@@ -189,16 +178,18 @@ void render() {
 	//绑定当前的program
 	shader->begin();
 
-	projection = camera->getProjectionMatrix();
+	// glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+	glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),  + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600, 0.1f, 100.0f);
+
+	// glm::mat4 projection = camera->getProjectionMatrix();
 	shader->setMatrix4x4("projection", projection);
+
+	// glm::mat4 view = camera->getViewMatrix();
+	shader->setMatrix4x4("view", view);
+
 	//绑定当前的vao
 	vao->begin();
-
-	//发出绘制指令
-	// CHECK_GL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
-
-	view = camera->getViewMatrix();
-	shader->setMatrix4x4("view", view);
 
 	for(unsigned int i = 0; i < 10; i++) {
 		model = glm::mat4(1.0f);

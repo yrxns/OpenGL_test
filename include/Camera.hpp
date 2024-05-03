@@ -13,7 +13,7 @@ enum class Camera_Movement {
 
 class Camera {
 public:
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.1f), glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f));
+    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f));
     ~Camera();
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();
@@ -26,16 +26,16 @@ private:
     void updateCameraVectors();
 
 public:
-    glm::vec3 mPosition{0.0f, 0.0f, 3.0f};
+    glm::vec3 mPosition{0.0f, 0.0f, 5.0f};
     glm::vec3 mUp{0.0f, 1.0f, 0.0f};
     glm::vec3 mRight{1.0f, 0.0f, 0.0f};
     glm::vec3 mFront{0.0f, 0.0f, -1.0f};
     glm::vec3 mWorldUp{0.0f, 1.0f, 0.0f};
 
-    float sensitivity{0.05f}; // 灵敏度值。
+    float sensitivity{10.0f}; // 灵敏度值。
     float yaw{-90.0f};         // 偏航角  x
     float pitch{0.0f};       // 俯仰角  y 
-    float MovementSpeed{2.5f}; // 移动速度
+    float MovementSpeed{0.1f}; // 移动速度
 
     float mFovy{45.0f};     // 视锥体的角度
     float mAspect{800.0f / 600.0f};

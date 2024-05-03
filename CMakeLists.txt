@@ -21,12 +21,11 @@ set(CMAKE_BUILD_TYPE Debug)      #Debug
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
 
-set(INCDIRS include .)
+set(INCDIRS include imgui)
 
 foreach(incdir ${INCDIRS})
     include_directories(${incdir})
 endforeach()
-
 
 add_subdirectory(glm)
 add_subdirectory(glfw)
@@ -34,6 +33,7 @@ add_subdirectory(glad)
 
 
 aux_source_directory(./src DIR_SRCS)
+aux_source_directory(./imgui DIR_SRCS)
 add_executable (main ${DIR_SRCS})
 target_link_libraries(main PUBLIC glm)
 target_link_libraries(main PUBLIC glfw)
@@ -61,5 +61,16 @@ add_executable (transform ${DIR_SRCS})
 target_link_libraries(transform PUBLIC glm)
 target_link_libraries(transform PUBLIC glfw)
 target_link_libraries(transform PUBLIC glad)
+
+### camera
+set(DIR_SRCS "")
+aux_source_directory(./src DIR_SRCS)
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/camera DIR_SRCS)
+list(REMOVE_ITEM DIR_SRCS ./src/main.cpp)
+add_executable (camera ${DIR_SRCS})
+target_link_libraries(camera PUBLIC glm)
+target_link_libraries(camera PUBLIC glfw)
+target_link_libraries(camera PUBLIC glad)
 
 # target_compile_definitions(${PROJECT_NAME} PUBLIC -DOPENGLTUTOR_HOME=\"${CMAKE_CURRENT_SOURCE_DIR}/\")

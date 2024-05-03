@@ -30,8 +30,8 @@ void Camera::processKeyboard(Camera_Movement direction, float deltaTime) {
 }
 
 void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch) {
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
+    xoffset *= MovementSpeed;
+    yoffset *= MovementSpeed;
 
     yaw   += xoffset;
     pitch += yoffset;

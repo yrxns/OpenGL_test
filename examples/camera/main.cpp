@@ -147,7 +147,7 @@ void prepareData() {
 }
 
 void prepareShader() {
-	shader = new Shader("../assets/vertex.glsl","../assets/fragment.glsl");
+	shader = new Shader("../examples/camera/shader/vertex.glsl","../examples/camera/shader/fragment.glsl");
 }
 
 void prepareTexture() {
@@ -228,6 +228,9 @@ int main() {
 	app->setMouseCallback(OnMouse);
 	app->setCursorCallback(OnCursor);
 	app->setScrollCallback(OnScroll);
+
+	// 移动鼠标
+	// glfwSetCursorPos(*app, 400, 300);
 
 	prepareShader();
 	prepareData();

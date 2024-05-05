@@ -15,8 +15,10 @@
 
 VBO *vbo = nullptr;
 VAO *vao = nullptr;
+VAO *lightvao = nullptr;
 EBO *ebo = nullptr;
 Shader	*shader = nullptr;
+Shader *lightShader = nullptr;
 Texture *container = nullptr;
 Texture *awesomeface = nullptr;
 glm::mat4 model(1.0f);
@@ -80,50 +82,61 @@ void OnScroll(double xoffset, double yoffset) {
 	camera->processMouseScroll(static_cast<float>(yoffset));
 }
 
+// 窗口获得焦点的回调函数  
+void on_window_focus(GLFWwindow* window, int focused) {  
+    if (focused) {  
+        printf("窗口获得焦点...\n");  
+        // 在这里执行当窗口获得焦点时需要做的操作  
+    } else {  
+        printf("窗口失去焦点...\n");  
+        // 在这里执行当窗口失去焦点时需要做的操作  
+    }  
+} 
+
 void prepareData() {
     // 数据
 	std::vector<float> vertices = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+         -0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f,  
+         0.5f,  0.5f, -0.5f,  
+         0.5f,  0.5f, -0.5f,  
+        -0.5f,  0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
 
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f, 
+         0.5f, -0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f, -0.5f,  0.5f, 
 
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f,  0.5f, 
+        -0.5f,  0.5f,  0.5f, 
 
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f, -0.5f,  
+         0.5f, -0.5f, -0.5f,  
+         0.5f, -0.5f, -0.5f,  
+         0.5f, -0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
 
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f,  
+         0.5f, -0.5f,  0.5f,  
+         0.5f, -0.5f,  0.5f,  
+        -0.5f, -0.5f,  0.5f, 
+        -0.5f, -0.5f, -0.5f, 
 
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+        -0.5f,  0.5f, -0.5f, 
+         0.5f,  0.5f, -0.5f,  
+         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f, -0.5f, 
 	};
 
 	std::vector<int> indexes = {
@@ -134,20 +147,23 @@ void prepareData() {
 	vao = new VAO;
 	vbo = new VBO;
 	ebo = new EBO;
+	lightvao = new VAO;
 
 	vao->begin();
 	vbo->bind();
-	ebo->bind();
 	vbo->setData(vertices, GL_STATIC_DRAW);
-	ebo->setData(indexes, GL_STATIC_DRAW);
-	vao->vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	vao->vertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
-	// vao->vertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
+	vao->vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	vao->end();
+
+	lightvao->begin();
+	vbo->bind();
+	lightvao->vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	lightvao->end();
 }
 
 void prepareShader() {
 	shader = new Shader("../assets/vertex.glsl","../assets/fragment.glsl");
+	lightShader = new Shader("../assets/lightV.glsl","../assets/lightF.glsl");
 }
 
 void prepareTexture() {
@@ -159,19 +175,6 @@ void preTransform() {
 	camera = new Camera();
 }
 
-	glm::vec3 cubePositions[] = {
-		glm::vec3( 0.0f,  0.0f,  0.0f), 
-		glm::vec3( 2.0f,  5.0f, -15.0f), 
-		glm::vec3(-1.5f, -2.2f, -2.5f),  
-		glm::vec3(-3.8f, -2.0f, -12.3f),  
-		glm::vec3( 2.4f, -0.4f, -3.5f),  
-		glm::vec3(-1.7f,  3.0f, -7.5f),  
-		glm::vec3( 1.3f, -2.0f, -2.5f),  
-		glm::vec3( 1.5f,  2.0f, -2.5f), 
-		glm::vec3( 1.5f,  0.2f, -1.5f), 
-		glm::vec3(-1.3f,  1.0f, -1.5f)  
-	};
-
 void render() {
 	//执行opengl画布清理操作
 	CHECK_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
@@ -181,38 +184,40 @@ void render() {
 	camera->lastFrame = currentFrame;
 
 	// 绑定纹理
-	container->bind();
-	awesomeface->bind();
+	// container->bind();
+	// awesomeface->bind();
 
 	//绑定当前的program
 	shader->begin();
 
-	// glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
-	// glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),  + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	// glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600, 0.1f, 100.0f);
-
+	shader->setVector3("objectColor", 1.0f, 0.5f, 0.31f);
+	shader->setVector3("lightColor",  1.0f, 1.0f, 1.0f);
+	model = glm::mat4(1.0f);
+	shader->setMatrix4x4("model", model);
 	glm::mat4 projection = camera->getProjectionMatrix();
 	shader->setMatrix4x4("projection", projection);
-
 	glm::mat4 view = camera->getViewMatrix();
 	shader->setMatrix4x4("view", view);
 
 	//绑定当前的vao
 	vao->begin();
-
-	for(unsigned int i = 0; i < 10; i++) {
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, cubePositions[i]);
-		float angle = 20.0f * i; 
-		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-		shader->setMatrix4x4("model", model);
-
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-	}
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	//解绑当前的vao
 	vao->end();
 	shader->end();
+
+	lightShader->begin();
+	lightShader->setMatrix4x4("view", view);
+	lightShader->setMatrix4x4("projection", projection);
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(1.2f, 1.0f, 2.0f));
+	model = glm::scale(model, glm::vec3(0.2f));
+	lightShader->setMatrix4x4("model", model);
+	lightvao->begin();
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	lightvao->end();
+	lightShader->end();
 }
 
 
@@ -228,6 +233,8 @@ int main() {
 	app->setMouseCallback(OnMouse);
 	app->setCursorCallback(OnCursor);
 	app->setScrollCallback(OnScroll);
+	// 设置窗口获得或失去焦点时的回调函数  
+    glfwSetWindowFocusCallback(*app, on_window_focus);  
 
 	prepareShader();
 	prepareData();
@@ -271,6 +278,9 @@ int main() {
 	delete shader;
 	delete container;
 	delete awesomeface;
+	delete camera;
+	delete lightvao;
+	delete lightShader;
 	app->destroy();
 
 	return 0;

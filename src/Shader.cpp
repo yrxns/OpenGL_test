@@ -107,6 +107,12 @@ void Shader::setVector3(const std::string& name, const float* values) {
     CHECK_GL(glUniform3fv(location, 1, values));
 }
 
+void Shader::setVector3(const std::string& name, glm::vec3 value) {
+    GLint location = glGetUniformLocation(mProgram, name.c_str());
+
+    CHECK_GL(glUniform3f(location, value.x, value.y, value.z));
+}
+
 void Shader::setVector4(const std::string& name, float x, float y, float z, float w) {
     GLint location = glGetUniformLocation(mProgram, name.c_str());
     

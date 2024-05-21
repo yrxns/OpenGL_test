@@ -18,7 +18,7 @@ Application::~Application() {
 }
 
 
-bool Application::init(const int& width, const int& height) {
+bool Application::init() {
 
 	//1 初始化GLFW基本环境
 	glfwInit();
@@ -30,7 +30,7 @@ bool Application::init(const int& width, const int& height) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	//2 创建窗体对象
-	mWindow = glfwCreateWindow(width, height, "LearnOpenGL", NULL, NULL);
+	mWindow = glfwCreateWindow(mWidth, mHeight, "LearnOpenGL", NULL, NULL);
 	if (mWindow == nullptr) {
 		std::cout << "Failed to create GLFW window" << std::endl;
 		return false;
@@ -51,7 +51,7 @@ bool Application::init(const int& width, const int& height) {
 	glEnable(GL_DEPTH_TEST);
 
 	//设置opengl视口以及清理颜色
-	glViewport(0, 0, width, height);
+	glViewport(0, 0, mWidth, mHeight);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
 	// 设置线框绘制模式
@@ -158,4 +158,29 @@ void Application::scrollCallback(GLFWwindow* window, double xoffset, double yoff
 	if (self->mScrollCallback != nullptr) {
 		self->mScrollCallback(xoffset, yoffset);
 	}
+}
+
+
+void default_resize(int width, int height) {
+	glViewport(0, 0, width, height);
+	std::cout << "default_resize" << std::endl;
+}
+
+void default_key(GLFWwindow *window, int key, int action, int mods) {
+	std::cout << key << std::endl;
+	if (key == 256) {
+		glfwSetWindowShouldClose(window, true);
+	}
+}
+
+void default_mouse(int button, int action, int mods) {
+	std::cout << "鼠标点击：(" << button << ", " << action << ", " << mods << ")" << std::endl;
+}
+
+void default_cursor(double xpos, double ypos) {
+	std::cout << "鼠标移动：(" << xpos << ", " << ypos << ")" << std::endl;
+}
+
+void default_scroll(double xoffset, double yoffset) {
+	std::cout << "鼠标滚轮: x offset = " << xoffset << ", y offset = " << yoffset << std::endl;
 }

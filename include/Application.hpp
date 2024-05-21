@@ -10,6 +10,12 @@ using MouseCallback = void(*)(int button, int action, int mods);
 using CursorCallback = void(*)(double xpos, double ypos);
 using ScrollCallback = void(*)(double xoffset, double yoffset);
 
+void default_resize(int width, int height);
+void default_key(GLFWwindow *window, int key, int action, int mods);
+void default_mouse(int button, int action, int mods);
+void default_cursor(double xpos, double ypos);
+void default_scroll(double xoffset, double yoffset);
+
 class Application {
 public:
 	~Application();
@@ -17,7 +23,7 @@ public:
 	//用于访问实例的静态函数
 	static Application* getInstance();
 
-	bool init(const int& width = 800, const int& height = 600);
+	bool init();
 
 	bool update();
 
@@ -37,6 +43,10 @@ public:
 
 	std::pair<double, double> getCursorPosition();
 
+public:
+	int mWidth{1980};
+	int mHeight{1080};
+
 private:
 	//C++类内函数指针
 	static void frameBufferSizeCallback(GLFWwindow* window, int width, int height);
@@ -51,13 +61,12 @@ private:
 
 	float deltaTime{0.0f};		// 帧时间间隔
 
-	ResizeCallback mResizeCallback{ nullptr };
-	KeyBoardCallback mKeyBoardCallback{ nullptr };
-	MouseCallback mMouseCallback{ nullptr };
-	CursorCallback mCursorCallback{ nullptr };
-	ScrollCallback mScrollCallback{ nullptr };
+	ResizeCallback mResizeCallback{ default_resize };
+	KeyBoardCallback mKeyBoardCallback{ default_key };
+	MouseCallback mMouseCallback{ default_mouse };
+	CursorCallback mCursorCallback{ default_cursor };
+	ScrollCallback mScrollCallback{ default_scroll };
 
 	Application();
 };
-
 #endif

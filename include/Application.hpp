@@ -5,8 +5,6 @@
 #include <iostream>
 #include <utility>
 
-class GLFWwindow;
-
 using ResizeCallback = void(*)(int width, int height);
 using KeyBoardCallback = void(*)(GLFWwindow *window, int key, int action, int mods);
 using MouseCallback = void(*)(int button, int action, int mods);
@@ -18,6 +16,8 @@ void default_key(GLFWwindow *window, int key, int action, int mods);
 void default_mouse(int button, int action, int mods);
 void default_cursor(double xpos, double ypos);
 void default_scroll(double xoffset, double yoffset);
+
+#define gl_app Application::getInstance()
 
 class Application {
 public:
@@ -82,6 +82,10 @@ public:
 		while (!glfwWindowShouldClose(mWindow)) {
 			//执行opengl画布清理操作
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			frame.currentFrame = static_cast<float>(glfwGetTime());
+			frame.deltaTime = frame.currentFrame - frame.lastFrame;
+			frame.lastFrame = frame.currentFrame;
 
 			func();
 
@@ -168,11 +172,18 @@ private:
 		}
 	}
 
+public:
+	struct Frame {
+		float currentFrame{0.0f};
+		float lastFrame{0.0f};
+		float deltaTime{0.0f};	// 帧时间间隔
+	};
+
+	Frame frame;
+
 private:
 
 	GLFWwindow* mWindow{ nullptr };
-
-	float deltaTime{0.0f};		// 帧时间间隔
 
 	ResizeCallback mResizeCallback{ default_resize };
 	KeyBoardCallback mKeyBoardCallback{ default_key };

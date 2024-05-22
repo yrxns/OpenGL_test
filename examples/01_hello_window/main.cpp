@@ -1,65 +1,53 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "core.hpp"
 #include <iostream>
+#include "Application.hpp"
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-void processInput(GLFWwindow *window);
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
-int main()
-{
-  glfwInit();
-  // 设置主要和次要版本
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-  // 创建窗口对象
-  GLFWwindow *window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
-  if (window == NULL)
-  {
-    std::cout << "Failed to create GLFW window" << std::endl;
-    glfwTerminate();
-    return -1;
-  }
-  glfwMakeContextCurrent(window);
-
-  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-  {
-    std::cout << "Failed to initialize GLAD" << std::endl;
-    return -1;
-  }
-  // 设置视口
-  glViewport(0, 0, 1080, 900);
-
-  // 注册窗口变化监听
-  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-  while (!glfwWindowShouldClose(window))
-  {
-    processInput(window);
-
-    // 渲染指令
-    // ...
-    glClearColor(25.0 / 255.0, 25.0 / 255.0, 25.0 / 255.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-  }
-
-  glfwTerminate();
-  return 0;
+void render() {
+	//执行opengl画布清理操作
+	CHECK_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height)
-{
-  glViewport(0, 0, width, height);
-}
+int main() {
+	Application *app = Application::getInstance();
 
-void processInput(GLFWwindow *window)
-{
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-  {
-    glfwSetWindowShouldClose(window, true);
-  }
+	if (!app->init()) {
+		return -1;
+	}
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+	ImGui::StyleColorsDark();
+
+	const char* glsl_version = "#version 330";
+	ImGui_ImplGlfw_InitForOpenGL(*app, true);
+	ImGui_ImplOpenGL3_Init(glsl_version);
+
+  app->rendering([&](){
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+    ImGui::Begin("controls");
+    ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::End();
+
+/*******************************************************************/
+
+/********************************************************************/
+
+		// 渲染 gui
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  });
+
+	app->destroy();
+
+	return 0;
 }

@@ -1,18 +1,28 @@
 #ifndef __VAO__
 #define __VAO__
 
+#include "core.hpp"
 #include <atomic>
 
 class VAO {
 public:
-    VAO();
-    ~VAO();
+    VAO() {
+        // 创建VAO
+        CHECK_GL(glGenVertexArrays(1, &_vao));
+    }
+    ~VAO() {
+        glDeleteVertexArrays(1, &_vao);
+    }
 
     // 绑定VAO
-    void begin();
+    void bind() {
+        CHECK_GL(glBindVertexArray(_vao));
+    }
 
     // 解绑当前 VAO
-    void end();
+    void unbind() {
+        CHECK_GL(glBindVertexArray(0));
+    }
     
     /******************************************************
      * @ index      ：指定要配置的顶点属性
@@ -23,7 +33,12 @@ public:
      * @ pointer    ：起始位置的偏移量
      *******************************************************/
     // 配置顶点属性指针
-    void vertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer);
+    void vertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer) {
+        // 启用顶点属性数组索引 index（顶点属性位置）
+        CHECK_GL(glEnableVertexAttribArray(index));
+
+        CHECK_GL(glVertexAttribPointer(index, size, type, normalized, stride, pointer)); 
+    }
 
     operator GLuint() {
         return _vao;
@@ -34,5 +49,7 @@ public:
     /*统计已创建的VAO对象的个数, 目前没有使用*/
     static std::atomic<int> counter;
 };
+
+std::atomic<int> VAO::counter(0);
 
 #endif

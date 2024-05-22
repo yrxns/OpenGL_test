@@ -47,24 +47,23 @@ int main() {
 
     // 定义顶点数组
   std::vector<float> vertices = {
-      0.5f, 0.5f, 0.0f,   // 右上角
-      0.5f, -0.5f, 0.0f,  // 右下角
-      -0.5f, -0.5f, 0.0f, // 左下角
-      -0.5f, 0.5f, 0.0f   // 左上角
-  };
-  std::vector<int> indexes = {
-      0, 1, 3, // 第一个三角形
-      1, 2, 3  // 第二个三角形
+        // first triangle
+        -0.9f, -0.5f, 0.0f,  // left 
+        -0.0f, -0.5f, 0.0f,  // right
+        -0.45f, 0.5f, 0.0f,  // top 
+        // second triangle
+         0.0f, -0.5f, 0.0f,  // left
+         0.9f, -0.5f, 0.0f,  // right
+         0.45f, 0.5f, 0.0f   // top 
   };
 
-  VBO vbo; VAO vao; EBO ebo;
-  vao.bind(); vbo.bind(); ebo.bind();
+  VBO vbo; VAO vao;
+  vao.bind(); vbo.bind();
 
   vbo.setData(vertices, GL_STATIC_DRAW);
-  ebo.setData(indexes, GL_STATIC_DRAW);
   vao.vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
 
-  ebo.unbind(); vbo.unbind(); vao.unbind();
+  vbo.unbind(); vao.unbind();
 
 
   // 创建顶点和片段着色器
@@ -121,8 +120,6 @@ int main() {
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
   app->rendering([&](){
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -133,9 +130,9 @@ int main() {
 
 /*******************************************************************/
     glUseProgram(shaderProgram);
-    vao.bind(); ebo.bind();
-    CHECK_GL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
-    vao.unbind(); ebo.unbind();
+    vao.bind();
+    CHECK_GL(glDrawArrays(GL_TRIANGLES, 0, 6));
+    vao.unbind();
 /********************************************************************/
 
 		// 渲染 gui

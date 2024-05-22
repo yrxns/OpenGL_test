@@ -11,22 +11,23 @@
 #include "EBO.hpp"
 #include <vector>
 
-const char *vertexShaderSource =
-    "#version 330 core\n"
+const char *vertexShaderSource ="#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
+    "layout (location = 1) in vec3 aColor;\n"
+    "out vec3 ourColor;\n"
     "void main()\n"
     "{\n"
-    "gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f);"
-    "gl_PointSize = 20.0f;"
-    "}\n";
+    "   gl_Position = vec4(aPos, 1.0);\n"
+    "   ourColor = aColor;\n"
+    "}\0";
 
-const char *fragmentShaderSource =
-    "#version 330 core\n"
+const char *fragmentShaderSource = "#version 330 core\n"
     "out vec4 FragColor;\n"
+    "in vec3 ourColor;\n"
     "void main()\n"
-    "{"
-    "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);"
-    "}";
+    "{\n"
+    "   FragColor = vec4(ourColor, 1.0f);\n"
+    "}\n\0";
 
 int main() {
 	Application *app = Application::getInstance();
@@ -47,24 +48,20 @@ int main() {
 
     // 定义顶点数组
   std::vector<float> vertices = {
-      0.5f, 0.5f, 0.0f,   // 右上角
-      0.5f, -0.5f, 0.0f,  // 右下角
-      -0.5f, -0.5f, 0.0f, // 左下角
-      -0.5f, 0.5f, 0.0f   // 左上角
-  };
-  std::vector<int> indexes = {
-      0, 1, 3, // 第一个三角形
-      1, 2, 3  // 第二个三角形
+        // positions         // colors
+         0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
+        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
+         0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
   };
 
-  VBO vbo; VAO vao; EBO ebo;
-  vao.bind(); vbo.bind(); ebo.bind();
+  VBO vbo; VAO vao;
+  vao.bind(); vbo.bind();
 
   vbo.setData(vertices, GL_STATIC_DRAW);
-  ebo.setData(indexes, GL_STATIC_DRAW);
-  vao.vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  vao.vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+  vao.vertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 
-  ebo.unbind(); vbo.unbind(); vao.unbind();
+  vbo.unbind(); vao.unbind();
 
 
   // 创建顶点和片段着色器
@@ -121,8 +118,6 @@ int main() {
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);
 
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
   app->rendering([&](){
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -133,9 +128,9 @@ int main() {
 
 /*******************************************************************/
     glUseProgram(shaderProgram);
-    vao.bind(); ebo.bind();
-    CHECK_GL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
-    vao.unbind(); ebo.unbind();
+    vao.bind();
+    CHECK_GL(glDrawArrays(GL_TRIANGLES, 0, 3));
+    vao.unbind();
 /********************************************************************/
 
 		// 渲染 gui

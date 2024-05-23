@@ -322,3 +322,39 @@ add_executable (light_map ${DIR_SRCS})
 target_link_libraries(light_map PUBLIC glm)
 target_link_libraries(light_map PUBLIC glfw)
 target_link_libraries(light_map PUBLIC glad)
+
+## light_map_exercise
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/22_light_map_exercise DIR_SRCS)
+add_executable (light_map_exercise ${DIR_SRCS})
+target_link_libraries(light_map_exercise PUBLIC glm)
+target_link_libraries(light_map_exercise PUBLIC glfw)
+target_link_libraries(light_map_exercise PUBLIC glad)
+
+## light_map_exercise_1
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/22_light_map_exercise_1 DIR_SRCS)
+add_executable (light_map_exercise_1 ${DIR_SRCS})
+target_link_libraries(light_map_exercise_1 PUBLIC glm)
+target_link_libraries(light_map_exercise_1 PUBLIC glfw)
+target_link_libraries(light_map_exercise_1 PUBLIC glad)
+
+## light_map_exercise_2
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/22_light_map_exercise_2 DIR_SRCS)
+add_executable (light_map_exercise_2 ${DIR_SRCS})
+target_link_libraries(light_map_exercise_2 PUBLIC glm)
+target_link_libraries(light_map_exercise_2 PUBLIC glfw)
+target_link_libraries(light_map_exercise_2 PUBLIC glad)
+
+## light_map_exercise_3
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/22_light_map_exercise_3 DIR_SRCS)
+add_executable (light_map_exercise_3 ${DIR_SRCS})
+target_link_libraries(light_map_exercise_3 PUBLIC glm)
+target_link_libraries(light_map_exercise_3 PUBLIC glfw)
+target_link_libraries(light_map_exercise_3 PUBLIC glad)

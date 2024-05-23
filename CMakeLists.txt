@@ -355,3 +355,12 @@ add_executable (use_camera ${DIR_SRCS})
 target_link_libraries(use_camera PUBLIC glm)
 target_link_libraries(use_camera PUBLIC glfw)
 target_link_libraries(use_camera PUBLIC glad)
+
+## use_camera_class
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/17_use_camera_class DIR_SRCS)
+add_executable (use_camera_class ${DIR_SRCS})
+target_link_libraries(use_camera_class PUBLIC glm)
+target_link_libraries(use_camera_class PUBLIC glfw)
+target_link_libraries(use_camera_class PUBLIC glad)

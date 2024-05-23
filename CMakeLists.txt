@@ -304,3 +304,21 @@ add_executable (basic_lighting ${DIR_SRCS})
 target_link_libraries(basic_lighting PUBLIC glm)
 target_link_libraries(basic_lighting PUBLIC glfw)
 target_link_libraries(basic_lighting PUBLIC glad)
+
+## light_material
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/20_light_material DIR_SRCS)
+add_executable (light_material ${DIR_SRCS})
+target_link_libraries(light_material PUBLIC glm)
+target_link_libraries(light_material PUBLIC glfw)
+target_link_libraries(light_material PUBLIC glad)
+
+## light_map
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/21_light_map DIR_SRCS)
+add_executable (light_map ${DIR_SRCS})
+target_link_libraries(light_map PUBLIC glm)
+target_link_libraries(light_map PUBLIC glfw)
+target_link_libraries(light_map PUBLIC glad)

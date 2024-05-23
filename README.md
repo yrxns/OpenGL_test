@@ -14,6 +14,25 @@ https://github.com/ocornut/imgui
 
 [glfw](https://www.glfw.org/)
 
+### assimp
+
+[编译指南](https://github.com/assimp/assimp/blob/master/Build.md)
+
+检查 CMakeLists.txt 中的`ASSIMP_BUILD_ZLIB` 选项是否开启，  ON
+
+```shell
+mkdir build && cd build
+cmake ..
+make -j9
+```
+
+获取 libassimp.a 和 libzlibstatic.a
+
+```c++
+target_link_libraries(main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libassimp.a)
+target_link_libraries(main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libzlibstatic.a)
+```
+
 
 
 OpenGL仅当3D坐标在3个轴（x、y和z）上-1.0到1.0的范围内时才处理它。

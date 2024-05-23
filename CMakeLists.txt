@@ -394,3 +394,12 @@ add_executable (spot_light_1 ${DIR_SRCS})
 target_link_libraries(spot_light_1 PUBLIC glm)
 target_link_libraries(spot_light_1 PUBLIC glfw)
 target_link_libraries(spot_light_1 PUBLIC glad)
+
+## multiple_lights
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/26_multiple_lights DIR_SRCS)
+add_executable (multiple_lights ${DIR_SRCS})
+target_link_libraries(multiple_lights PUBLIC glm)
+target_link_libraries(multiple_lights PUBLIC glfw)
+target_link_libraries(multiple_lights PUBLIC glad)

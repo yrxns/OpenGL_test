@@ -18,13 +18,13 @@
 #include <vector>
 
 int main() {
-  cameraNS::camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+  cameraNS::camera = new Camera(glm::vec3(0.0f, 0.0f, 5.0f));
   gl_app->mWidth = 800;
   gl_app->mHeight = 600;
   gl_app->setKeyBoardCallback(cameraNS::on_key);
   gl_app->setMouseCallback(cameraNS::on_mouse);
   gl_app->setScrollCallback(cameraNS::on_scroll);
-  gl_app->setCursorCallback(cameraNS::on_cursor);
+  // gl_app->setCursorCallback(cameraNS::on_cursor);
 	if (!gl_app->init()) {
 		return -1;
 	}
@@ -39,11 +39,11 @@ int main() {
 	ImGui_ImplGlfw_InitForOpenGL(*gl_app, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
-  PlaneGeometry planeGeometry(1.0, 1.0, 1.0, 1.0);
   BoxGeometry boxGeometry(1.0, 1.0, 1.0);
-  SphereGeometry sphereGeometry(0.5, 20.0, 20.0);
+  SphereGeometry sphereGeometry(0.1, 10.0, 10.0);
 
-  Shader ourShader("../examples/17_use_camera_class/shader/vertex.glsl", "../examples/17_use_camera_class/shader/fragment.glsl");
+  Shader ourShader("../examples/18_light_scene/shader/vertex.glsl", "../examples/18_light_scene/shader/fragment.glsl");
+  Shader lightCubeShader("../examples/18_light_scene/shader/light_vert.glsl", "../examples/18_light_scene/shader/light_frag.glsl");
 
   Texture_load texture1("../assets/container.png", 0, GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT);
   Texture_load texture2("../assets/awesomeface.png", 1, GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT);
@@ -52,20 +52,11 @@ int main() {
   ourShader.setInt("texture2", 1);
   ourShader.end();
 
-    glm::vec3 cubePositions[] = {
-        glm::vec3( 0.0f,  0.0f,  0.0f),
-        glm::vec3( 2.0f,  5.0f, -15.0f),
-        glm::vec3(-1.5f, -2.2f, -2.5f),
-        glm::vec3(-3.8f, -2.0f, -12.3f),
-        glm::vec3( 2.4f, -0.4f, -3.5f),
-        glm::vec3(-1.7f,  3.0f, -7.5f),
-        glm::vec3( 1.3f, -2.0f, -2.5f),
-        glm::vec3( 1.5f,  2.0f, -2.5f),
-        glm::vec3( 1.5f,  0.2f, -1.5f),
-        glm::vec3(-1.3f,  1.0f, -1.5f)
-    };
-
+  float fov = 45.0f; // 视锥体的角度
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+  // 光照信息
+  glm::vec3 lightPosition = glm::vec3(1.0, 1.5, 0.0); // 光照位置
+  ourShader.begin(), ourShader.setVector3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f)), ourShader.end();
 
   gl_app->rendering([&](){
     ImGui_ImplOpenGL3_NewFrame();
@@ -90,49 +81,34 @@ int main() {
 /*******************************************************************/
     ourShader.begin();
 
-    // create transformations
-    glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+    glm::mat4 model         = glm::mat4(1.0f);
     glm::mat4 projection    = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    // glm::mat4 view = glm::lookAt(cameraNS::camera->mPosition, cameraNS::camera->mPosition + cameraNS::camera->mFront, cameraNS::camera->mUp);
-    // projection = glm::perspective(glm::radians(cameraNS::camera->mFovy), (float)gl_app->mWidth / (float)gl_app->mHeight, 0.1f, 100.0f);
     glm::mat4 view = cameraNS::camera->getViewMatrix();
     projection = cameraNS::camera->getProjectionMatrix(cameraNS::camera->mFovy, (float)gl_app->mWidth / (float)gl_app->mHeight, 0.1f, 100.0f);
+
+    float rotate = glfwGetTime() * 0.2f;
+    glm::qua<float> qu = glm::qua<float>(glm::vec3(rotate, rotate, rotate));
+    model = glm::mat4_cast(qu);
 
     ourShader.setMatrix4x4("model", model);
     ourShader.setMatrix4x4("view", view);
     ourShader.setMatrix4x4("projection", projection);
 
-    for (unsigned int i = 0; i < 10; i++)
-    {
-      glm::mat4 model = glm::mat4(1.0f);
-      model = glm::translate(model, cubePositions[i]);
-      float angle = 20.0f * i;
-      if (i % 3 == 0) {
-        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0, 1.0, 1.0));
-      }
-      model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-      model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
-      ourShader.setMatrix4x4("model", model);
-      glBindVertexArray(boxGeometry.VAO);
-      glDrawElements(GL_TRIANGLES, boxGeometry.indices.size(), GL_UNSIGNED_INT, 0);
-    }
-
-    model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(-1.0, 0.0, 0.0));
-    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    ourShader.setMatrix4x4("model", model);
-    glBindVertexArray(planeGeometry.VAO);
-    glDrawElements(GL_LINE_LOOP, planeGeometry.indices.size(), GL_UNSIGNED_INT, 0);
-
-    model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(1.0, 0.0, 0.0));
-    model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0, 0.5, 0.5));
-    ourShader.setMatrix4x4("model", model);
-    CHECK_GL(glBindVertexArray(sphereGeometry.VAO));
-    glDrawElements(GL_TRIANGLES, sphereGeometry.indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(boxGeometry.VAO);
+    glDrawElements(GL_TRIANGLES, boxGeometry.indices.size(), GL_UNSIGNED_INT, 0);
 
     ourShader.end();
+
+    // 绘制灯光物体
+    lightCubeShader.begin();
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(lightPosition.x * glm::sin(glfwGetTime()), lightPosition.y, lightPosition.z));
+    lightCubeShader.setMatrix4x4("model", model);
+    lightCubeShader.setMatrix4x4("view", view);
+    lightCubeShader.setMatrix4x4("projection", projection);
+    glBindVertexArray(sphereGeometry.VAO);
+    glDrawElements(GL_TRIANGLES, sphereGeometry.indices.size(), GL_UNSIGNED_INT, 0);
+    lightCubeShader.end();
 /********************************************************************/
 
 		// 渲染 gui
@@ -141,7 +117,6 @@ int main() {
   });
   
   boxGeometry.dispose();
-  planeGeometry.dispose();
   sphereGeometry.dispose();
 	gl_app->destroy();
 

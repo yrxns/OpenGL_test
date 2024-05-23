@@ -103,7 +103,7 @@ public:
 
 namespace cameraNS {
 
-    Camera *camera = nullptr;int s = 3;
+    Camera *camera = nullptr;
 
     void on_key(GLFWwindow *window, int key, int action, int mods) {
         std::cout << key << std::endl;

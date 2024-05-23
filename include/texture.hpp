@@ -64,11 +64,18 @@ public:
             //--反转y轴
             stbi_set_flip_vertically_on_load(true);
 
-            unsigned char* data = stbi_load(path.c_str(), &mWidth, &mHeight, &channels, STBI_rgb_alpha);
-
+            unsigned char* data = stbi_load(path.c_str(), &mWidth, &mHeight, &channels, 0);
+            std::cout << "channels: " << channels << std::endl;
             if (data) {
+                GLenum format;
+                if (channels == 1)
+                    format = GL_RED;
+                else if (channels == 3)
+                    format = GL_RGB;
+                else if (channels == 4)
+                    format = GL_RGBA;
                 // 传输纹理数据,开辟显存
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mWidth, mHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+                glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format, GL_UNSIGNED_BYTE, data);
                 // 自动生成所有需要的多级渐远纹理
                 glGenerateMipmap(GL_TEXTURE_2D);
             } else {

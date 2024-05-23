@@ -8,7 +8,6 @@ in vec3 outFragPos;
 struct Material {
   sampler2D diffuse; // 漫反射贴图
   sampler2D specular; // 镜面光贴图
-  sampler2D emission;
   float shininess; // 高光指数
 };
 
@@ -16,17 +15,22 @@ struct Material {
 struct Light {
   vec3 position;
 
+  vec3 direction; // 光照方向
+  float cutOff; // 切光角
+  float outerCutOff; // 外切光角
+
   vec3 ambient;
   vec3 diffuse;
   vec3 specular;
+
+  float constant; // 常数项
+  float linear; // 一次项
+  float quadratic; // 二次项
 };
 
 uniform vec3 viewPos; // 相机位置
 uniform Material material;
 uniform Light light;
-
-uniform float matrixlight;
-uniform float matrixmove;
 
 void main() {
 
@@ -45,9 +49,22 @@ void main() {
   float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
   vec3 specular = light.specular * spec * texture(material.specular, outTexCoord).rgb; // 镜面光
 
-  // vec3 emission = texture(material.emission, outTexCoord).rgb;
-  vec3 emission = matrixlight*texture(material.emission,vec2(outTexCoord.x,outTexCoord.y+matrixmove)).rgb;
+  // spotlight (soft edges)
+  float theta = dot(lightDir, normalize(-light.direction)); 
+  float epsilon = (light.cutOff - light.outerCutOff);
+  float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
+  diffuse  *= intensity;
+  specular *= intensity;
 
-  vec3 result = ambient + diffuse + specular + emission;
+  // 计算衰减值
+  float distance = length(light.position - outFragPos);
+  float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * pow(distance, 2.0));
+
+  // 将环境光、漫反射、镜面光分别乘以衰减距离
+  ambient *= attenuation;
+  diffuse *= attenuation;
+  specular *= attenuation;
+
+  vec3 result = ambient + diffuse + specular;
   FragColor = vec4(result, 1.0);
 }

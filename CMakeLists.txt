@@ -358,3 +358,39 @@ add_executable (light_map_exercise_3 ${DIR_SRCS})
 target_link_libraries(light_map_exercise_3 PUBLIC glm)
 target_link_libraries(light_map_exercise_3 PUBLIC glfw)
 target_link_libraries(light_map_exercise_3 PUBLIC glad)
+
+## direction_light
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/23_direction_light DIR_SRCS)
+add_executable (direction_light ${DIR_SRCS})
+target_link_libraries(direction_light PUBLIC glm)
+target_link_libraries(direction_light PUBLIC glfw)
+target_link_libraries(direction_light PUBLIC glad)
+
+## point_light
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/24_point_light DIR_SRCS)
+add_executable (point_light ${DIR_SRCS})
+target_link_libraries(point_light PUBLIC glm)
+target_link_libraries(point_light PUBLIC glfw)
+target_link_libraries(point_light PUBLIC glad)
+
+## spot_light
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/25_spot_light DIR_SRCS)
+add_executable (spot_light ${DIR_SRCS})
+target_link_libraries(spot_light PUBLIC glm)
+target_link_libraries(spot_light PUBLIC glfw)
+target_link_libraries(spot_light PUBLIC glad)
+
+## spot_light_1
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/25_spot_light_1 DIR_SRCS)
+add_executable (spot_light_1 ${DIR_SRCS})
+target_link_libraries(spot_light_1 PUBLIC glm)
+target_link_libraries(spot_light_1 PUBLIC glfw)
+target_link_libraries(spot_light_1 PUBLIC glad)

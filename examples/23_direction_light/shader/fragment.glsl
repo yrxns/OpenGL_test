@@ -8,13 +8,13 @@ in vec3 outFragPos;
 struct Material {
   sampler2D diffuse; // 漫反射贴图
   sampler2D specular; // 镜面光贴图
-  sampler2D emission;
   float shininess; // 高光指数
 };
 
 // 光源属性
 struct Light {
-  vec3 position;
+  // vec3 position; // 使用定向光就不再需要了
+  vec3 direction;
 
   vec3 ambient;
   vec3 diffuse;
@@ -25,9 +25,6 @@ uniform vec3 viewPos; // 相机位置
 uniform Material material;
 uniform Light light;
 
-uniform float matrixlight;
-uniform float matrixmove;
-
 void main() {
 
   // ambient
@@ -35,7 +32,7 @@ void main() {
 
   // diffuse
   vec3 norm = normalize(outNormal);
-  vec3 lightDir = normalize(light.position - outFragPos);
+  vec3 lightDir = normalize(light.direction);
   float diff = max(dot(norm, lightDir), 0.0);
   vec3 diffuse = light.diffuse * diff * texture(material.diffuse, outTexCoord).rgb;
 
@@ -45,9 +42,6 @@ void main() {
   float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
   vec3 specular = light.specular * spec * texture(material.specular, outTexCoord).rgb; // 镜面光
 
-  // vec3 emission = texture(material.emission, outTexCoord).rgb;
-  vec3 emission = matrixlight*texture(material.emission,vec2(outTexCoord.x,outTexCoord.y+matrixmove)).rgb;
-
-  vec3 result = ambient + diffuse + specular + emission;
+  vec3 result = ambient + diffuse + specular;
   FragColor = vec4(result, 1.0);
 }

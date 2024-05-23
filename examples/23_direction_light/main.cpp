@@ -42,17 +42,15 @@ int main() {
   BoxGeometry boxGeometry(1.0, 1.0, 1.0);
   SphereGeometry sphereGeometry(0.1, 10.0, 10.0);
 
-  Shader ourShader("../examples/22_light_map_exercise_3/shader/vertex.glsl", "../examples/22_light_map_exercise_3/shader/fragment.glsl");
-  Shader lightCubeShader("../examples/22_light_map_exercise_3/shader/light_vert.glsl", "../examples/22_light_map_exercise_3/shader/light_frag.glsl");
+  Shader ourShader("../examples/23_direction_light/shader/vertex.glsl", "../examples/23_direction_light/shader/fragment.glsl");
+  Shader lightCubeShader("../examples/23_direction_light/shader/light_vert.glsl", "../examples/23_direction_light/shader/light_frag.glsl");
 
   Texture_load texture1("../assets/container2.png", 0, GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT);
   Texture_load texture2("../assets/container2_specular.png", 1, GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT);
-  Texture_load texture3("../assets/matrix.jpg", 2, GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT);
 
-  ourShader.begin();
+  ourShader.begin(); texture1.bind(); texture2.bind();
   ourShader.setInt("material.diffuse", 0);
   ourShader.setInt("material.specular", 1);
-  ourShader.setInt("material.emission", 2);
   ourShader.end();
 
   glm::vec3 ambient(0.5f, 0.5f, 0.5f);
@@ -65,6 +63,19 @@ int main() {
   // 传递材质属性
   ourShader.setFloat("material.shininess", 64.0f);
   ourShader.end();
+
+    glm::vec3 cubePositions[] = {
+        glm::vec3( 0.0f,  0.0f,  0.0f),
+        glm::vec3( 2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3( 2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3( 1.3f, -2.0f, -2.5f),
+        glm::vec3( 1.5f,  2.0f, -2.5f),
+        glm::vec3( 1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
 
   gl_app->rendering([&](){
     ImGui_ImplOpenGL3_NewFrame();
@@ -107,18 +118,24 @@ int main() {
     ourShader.setVector3("light.diffuse", diffuse);
     ourShader.setVector3("light.specular", specular);
 
-    ourShader.setVector3("light.position", lightPos);
+    ourShader.setVector3("light.direction", lightPos);
     ourShader.setVector3("viewPos", cameraNS::camera->mPosition);
     ourShader.setMatrix4x4("model", model);
     ourShader.setMatrix4x4("view", view);
     ourShader.setMatrix4x4("projection", projection);
 
-    ourShader.setFloat("matrixlight", (1.0+sin(glfwGetTime()))/2+0.5);
-    ourShader.setFloat("matrixmove", glfwGetTime());
+    for (unsigned int i = 0; i < 10; i++)
+    {
+      model = glm::mat4(1.0f);
+      model = glm::translate(model, cubePositions[i]);
 
-    texture1.bind(); texture2.bind(); texture3.bind();
-    glBindVertexArray(boxGeometry.VAO);
-    glDrawElements(GL_TRIANGLES, boxGeometry.indices.size(), GL_UNSIGNED_INT, 0);
+      float angle = 10.0f * i;
+      model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+      ourShader.setMatrix4x4("model", model);
+      glBindVertexArray(boxGeometry.VAO);
+      glDrawElements(GL_TRIANGLES, boxGeometry.indices.size(), GL_UNSIGNED_INT, 0);
+    }
 
     ourShader.end();
 

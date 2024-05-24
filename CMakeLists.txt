@@ -403,3 +403,23 @@ add_executable (multiple_lights ${DIR_SRCS})
 target_link_libraries(multiple_lights PUBLIC glm)
 target_link_libraries(multiple_lights PUBLIC glfw)
 target_link_libraries(multiple_lights PUBLIC glad)
+
+## load_model
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/27_load_model DIR_SRCS)
+add_executable (load_model ${DIR_SRCS})
+target_link_libraries(load_model PUBLIC glm)
+target_link_libraries(load_model PUBLIC glfw)
+target_link_libraries(load_model PUBLIC glad)
+target_link_libraries(load_model PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libassimp.a)
+target_link_libraries(load_model PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libzlibstatic.a)
+
+## depth_testing
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/28_depth_testing DIR_SRCS)
+add_executable (depth_testing ${DIR_SRCS})
+target_link_libraries(depth_testing PUBLIC glm)
+target_link_libraries(depth_testing PUBLIC glfw)
+target_link_libraries(depth_testing PUBLIC glad)

@@ -32,15 +32,15 @@ add_subdirectory(glfw)
 add_subdirectory(glad)
 
 
-# aux_source_directory(./src DIR_SRCS)
-# aux_source_directory(./imgui DIR_SRCS)
-# add_executable (main ${DIR_SRCS})
-# target_link_libraries(main PUBLIC glm)
-# target_link_libraries(main PUBLIC glfw)
-# target_link_libraries(main PUBLIC glad)
+aux_source_directory(./src DIR_SRCS)
+aux_source_directory(./imgui DIR_SRCS)
+add_executable (main ${DIR_SRCS})
+target_link_libraries(main PUBLIC glm)
+target_link_libraries(main PUBLIC glfw)
+target_link_libraries(main PUBLIC glad)
 
-# target_link_libraries(main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libassimp.a)
-# target_link_libraries(main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libzlibstatic.a)
+target_link_libraries(main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libassimp.a)
+target_link_libraries(main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libzlibstatic.a)
 
 # examples
 
@@ -423,3 +423,12 @@ add_executable (depth_testing ${DIR_SRCS})
 target_link_libraries(depth_testing PUBLIC glm)
 target_link_libraries(depth_testing PUBLIC glfw)
 target_link_libraries(depth_testing PUBLIC glad)
+
+## stencil_testing
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/29_stencil_testing DIR_SRCS)
+add_executable (stencil_testing ${DIR_SRCS})
+target_link_libraries(stencil_testing PUBLIC glm)
+target_link_libraries(stencil_testing PUBLIC glfw)
+target_link_libraries(stencil_testing PUBLIC glad)

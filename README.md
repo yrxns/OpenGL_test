@@ -52,90 +52,29 @@ glm::qua<float> qu = glm::qua<float>(glm::vec3(rotate, rotate, rotate));
 model = glm::mat4_cast(qu);
 ```
 
-### 环境光
+开启模板缓冲
 
 ```c++
-void main()
-{
-    float ambientStrength = 0.1;
-    vec3 ambient = ambientStrength * lightColor;
-
-    vec3 result = ambient * objectColor;
-    FragColor = vec4(result, 1.0);
-}
+glEnable(GL_STENCIL_TEST);
 ```
 
-### 漫反射
+清除模板缓冲
+
 ```c++
-#version 330 core
-out vec4 FragColor;
-in vec3 outNormal;//法向量
-in vec3 outFragPos; // 片元位置
-
-uniform vec3 lightPos;//光照位置
-uniform vec3 viewPos; // 视线方向
-uniform vec3 lightColor;
-uniform vec3 objectColor;
-
-void main()
-{
-    // 环境光常量
-    float ambientStrength = 0.1;
-    vec3 ambient = ambientStrength * lightColor;
-		
-    vec3 norm = normalize(outNormal); // 法向量单位化
-    vec3 lightDir = normalize(lightPos - outFragPos); // 片元位置指向光照方向
-
-    float diff = max(dot(norm, lightDir), 0.0); // 漫反射分量
-    vec3 diffuse = diff * lightColor; // 漫反射
-	
-    vec3 result = (ambient + diffuse) * objectColor;
-    
-    FragColor = vec4(result, 1.0);
-}
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 ```
 
-### 镜面光
+模板掩码
 
 ```c++
-#version 330 core
-out vec4 FragColor;
-in vec2 outTexCoord;
-in vec3 outNormal;
-in vec3 outFragPos;
+glStencilMask(0xFF); // 每一位写入模板缓冲时都保持原样
+glStencilMask(0x00); // 每一位在写入模板缓冲时都会变成0（禁用写入）
+```
 
-uniform vec3 lightColor;
-uniform vec3 lightPos;
-uniform vec3 viewPos; // 相机位置
+模板函数
 
-uniform float ambientStrength;
-uniform float specularStrength;
-
-uniform sampler2D texture1;
-uniform sampler2D texture2;
-
-void main() {
-
-  vec4 objectColor = mix(texture(texture1, outTexCoord), texture(texture2, outTexCoord), 0.1);
-  //vec4 objColor = vec4(1.0f, 0.5f, 0.31f, 1.0f);
-
-  vec3 ambient = ambientStrength * lightColor; // 环境光
-
-  vec3 norm = normalize(outNormal);
-  vec3 lightDir = normalize(lightPos - outFragPos);
-
-  float diff = max(dot(norm, lightDir), 0.0);
-  vec3 diffuse = diff * lightColor; // 漫反射
-
-  vec3 viewDir = normalize(viewPos - outFragPos);
-  vec3 reflectDir = reflect(-lightDir, norm);
-
-  float spec = pow(max(dot(viewDir, reflectDir), 0.0), 256);
-  vec3 specular = specularStrength * spec * lightColor; // 镜面光
-
-  vec3 result = (ambient + diffuse + specular) * vec3(objectColor);
-
-  FragColor = vec4(result, 1.0);
-}
+```c++
+glStencilFunc(GLenum func, GLint ref, GLuint mask)
+glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass)
 ```
 

@@ -1,0 +1,6 @@
+
+void draw();
+
+class Object {
+
+};

@@ -432,3 +432,21 @@ add_executable (stencil_testing ${DIR_SRCS})
 target_link_libraries(stencil_testing PUBLIC glm)
 target_link_libraries(stencil_testing PUBLIC glfw)
 target_link_libraries(stencil_testing PUBLIC glad)
+
+## blending
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/30_blending DIR_SRCS)
+add_executable (blending ${DIR_SRCS})
+target_link_libraries(blending PUBLIC glm)
+target_link_libraries(blending PUBLIC glfw)
+target_link_libraries(blending PUBLIC glad)
+
+## blending_1
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/30_blending_1 DIR_SRCS)
+add_executable (blending_1 ${DIR_SRCS})
+target_link_libraries(blending_1 PUBLIC glm)
+target_link_libraries(blending_1 PUBLIC glfw)
+target_link_libraries(blending_1 PUBLIC glad)

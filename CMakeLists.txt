@@ -486,3 +486,39 @@ add_executable (frame_buffers_2 ${DIR_SRCS})
 target_link_libraries(frame_buffers_2 PUBLIC glm)
 target_link_libraries(frame_buffers_2 PUBLIC glfw)
 target_link_libraries(frame_buffers_2 PUBLIC glad)
+
+## frame_buffers_3
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/32_frame_buffers_3 DIR_SRCS)
+add_executable (frame_buffers_3 ${DIR_SRCS})
+target_link_libraries(frame_buffers_3 PUBLIC glm)
+target_link_libraries(frame_buffers_3 PUBLIC glfw)
+target_link_libraries(frame_buffers_3 PUBLIC glad)
+
+## frame_buffers_4
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/32_frame_buffers_4 DIR_SRCS)
+add_executable (frame_buffers_4 ${DIR_SRCS})
+target_link_libraries(frame_buffers_4 PUBLIC glm)
+target_link_libraries(frame_buffers_4 PUBLIC glfw)
+target_link_libraries(frame_buffers_4 PUBLIC glad)
+
+## frame_buffers_5
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/32_frame_buffers_5 DIR_SRCS)
+add_executable (frame_buffers_5 ${DIR_SRCS})
+target_link_libraries(frame_buffers_5 PUBLIC glm)
+target_link_libraries(frame_buffers_5 PUBLIC glfw)
+target_link_libraries(frame_buffers_5 PUBLIC glad)
+
+## frame_buffers_6
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/32_frame_buffers_6 DIR_SRCS)
+add_executable (frame_buffers_6 ${DIR_SRCS})
+target_link_libraries(frame_buffers_6 PUBLIC glm)
+target_link_libraries(frame_buffers_6 PUBLIC glfw)
+target_link_libraries(frame_buffers_6 PUBLIC glad)

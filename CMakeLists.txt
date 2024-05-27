@@ -450,3 +450,12 @@ add_executable (blending_1 ${DIR_SRCS})
 target_link_libraries(blending_1 PUBLIC glm)
 target_link_libraries(blending_1 PUBLIC glfw)
 target_link_libraries(blending_1 PUBLIC glad)
+
+## face_culling
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/31_face_culling DIR_SRCS)
+add_executable (face_culling ${DIR_SRCS})
+target_link_libraries(face_culling PUBLIC glm)
+target_link_libraries(face_culling PUBLIC glfw)
+target_link_libraries(face_culling PUBLIC glad)

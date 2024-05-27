@@ -459,3 +459,30 @@ add_executable (face_culling ${DIR_SRCS})
 target_link_libraries(face_culling PUBLIC glm)
 target_link_libraries(face_culling PUBLIC glfw)
 target_link_libraries(face_culling PUBLIC glad)
+
+## frame_buffers
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/32_frame_buffers DIR_SRCS)
+add_executable (frame_buffers ${DIR_SRCS})
+target_link_libraries(frame_buffers PUBLIC glm)
+target_link_libraries(frame_buffers PUBLIC glfw)
+target_link_libraries(frame_buffers PUBLIC glad)
+
+## frame_buffers_1
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/32_frame_buffers_1 DIR_SRCS)
+add_executable (frame_buffers_1 ${DIR_SRCS})
+target_link_libraries(frame_buffers_1 PUBLIC glm)
+target_link_libraries(frame_buffers_1 PUBLIC glfw)
+target_link_libraries(frame_buffers_1 PUBLIC glad)
+
+## frame_buffers_2
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/32_frame_buffers_2 DIR_SRCS)
+add_executable (frame_buffers_2 ${DIR_SRCS})
+target_link_libraries(frame_buffers_2 PUBLIC glm)
+target_link_libraries(frame_buffers_2 PUBLIC glfw)
+target_link_libraries(frame_buffers_2 PUBLIC glad)

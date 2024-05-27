@@ -195,7 +195,10 @@ private:
 };
 
 void default_resize(int width, int height) {
+	std::cout << "(width, height): " << "(" << width << ", " << height << ")" << std::endl;
 	glViewport(0, 0, width, height);
+	gl_app->mWidth = width;
+	gl_app->mHeight = height;
 	std::cout << "default_resize" << std::endl;
 }
 

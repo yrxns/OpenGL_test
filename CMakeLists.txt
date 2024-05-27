@@ -522,3 +522,12 @@ add_executable (frame_buffers_6 ${DIR_SRCS})
 target_link_libraries(frame_buffers_6 PUBLIC glm)
 target_link_libraries(frame_buffers_6 PUBLIC glfw)
 target_link_libraries(frame_buffers_6 PUBLIC glad)
+
+## cube_maps
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/33_cube_maps DIR_SRCS)
+add_executable (cube_maps ${DIR_SRCS})
+target_link_libraries(cube_maps PUBLIC glm)
+target_link_libraries(cube_maps PUBLIC glfw)
+target_link_libraries(cube_maps PUBLIC glad)

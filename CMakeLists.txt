@@ -571,3 +571,39 @@ target_link_libraries(cube_maps_4 PUBLIC glfw)
 target_link_libraries(cube_maps_4 PUBLIC glad)
 target_link_libraries(cube_maps_4 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libassimp.a)
 target_link_libraries(cube_maps_4 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libzlibstatic.a)
+
+## advanced_glsl
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/34_advanced_glsl DIR_SRCS)
+add_executable (advanced_glsl ${DIR_SRCS})
+target_link_libraries(advanced_glsl PUBLIC glm)
+target_link_libraries(advanced_glsl PUBLIC glfw)
+target_link_libraries(advanced_glsl PUBLIC glad)
+
+## advanced_glsl_1
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/34_advanced_glsl_1 DIR_SRCS)
+add_executable (advanced_glsl_1 ${DIR_SRCS})
+target_link_libraries(advanced_glsl_1 PUBLIC glm)
+target_link_libraries(advanced_glsl_1 PUBLIC glfw)
+target_link_libraries(advanced_glsl_1 PUBLIC glad)
+
+## advanced_glsl_2
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/34_advanced_glsl_2 DIR_SRCS)
+add_executable (advanced_glsl_2 ${DIR_SRCS})
+target_link_libraries(advanced_glsl_2 PUBLIC glm)
+target_link_libraries(advanced_glsl_2 PUBLIC glfw)
+target_link_libraries(advanced_glsl_2 PUBLIC glad)
+
+## advanced_glsl_3
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/34_advanced_glsl_3 DIR_SRCS)
+add_executable (advanced_glsl_3 ${DIR_SRCS})
+target_link_libraries(advanced_glsl_3 PUBLIC glm)
+target_link_libraries(advanced_glsl_3 PUBLIC glfw)
+target_link_libraries(advanced_glsl_3 PUBLIC glad)

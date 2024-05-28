@@ -669,3 +669,12 @@ target_link_libraries(instancing_rock_1 PUBLIC glfw)
 target_link_libraries(instancing_rock_1 PUBLIC glad)
 target_link_libraries(instancing_rock_1 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libassimp.a)
 target_link_libraries(instancing_rock_1 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libzlibstatic.a)
+
+## blinn_phong
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/39_blinn_phong DIR_SRCS)
+add_executable (blinn_phong ${DIR_SRCS})
+target_link_libraries(blinn_phong PUBLIC glm)
+target_link_libraries(blinn_phong PUBLIC glfw)
+target_link_libraries(blinn_phong PUBLIC glad)

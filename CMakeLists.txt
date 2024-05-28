@@ -551,3 +551,23 @@ target_link_libraries(cube_maps_2 PUBLIC glfw)
 target_link_libraries(cube_maps_2 PUBLIC glad)
 target_link_libraries(cube_maps_2 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libassimp.a)
 target_link_libraries(cube_maps_2 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libzlibstatic.a)
+
+## cube_maps_3
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/33_cube_maps_3 DIR_SRCS)
+add_executable (cube_maps_3 ${DIR_SRCS})
+target_link_libraries(cube_maps_3 PUBLIC glm)
+target_link_libraries(cube_maps_3 PUBLIC glfw)
+target_link_libraries(cube_maps_3 PUBLIC glad)
+
+## cube_maps_4
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/33_cube_maps_4 DIR_SRCS)
+add_executable (cube_maps_4 ${DIR_SRCS})
+target_link_libraries(cube_maps_4 PUBLIC glm)
+target_link_libraries(cube_maps_4 PUBLIC glfw)
+target_link_libraries(cube_maps_4 PUBLIC glad)
+target_link_libraries(cube_maps_4 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libassimp.a)
+target_link_libraries(cube_maps_4 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libzlibstatic.a)

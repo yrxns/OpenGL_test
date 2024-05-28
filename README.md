@@ -78,3 +78,4 @@ glStencilFunc(GLenum func, GLint ref, GLuint mask)
 glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass)
 ```
 
+### 裁剪测试

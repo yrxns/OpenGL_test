@@ -9,14 +9,16 @@
 
 class Shader {
 public:
-	Shader(const char* vertexPath, const char* fragmentPath) {
+	Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr) {
 		//声明装入shader代码字符串的两个string
 		std::string vertexCode;
 		std::string fragmentCode;
+		std::string geometryCode;
 
 		//声明用于读取vs跟fs文件的inFileStream
 		std::ifstream vShaderFile;
 		std::ifstream fShaderFile;
+		std::ifstream gShaderFile;
 
 		//保证ifstream遇到问题的时候可以抛出异常
 		vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -39,6 +41,14 @@ public:
 			//4 将字符串从stringStream当中读取出来，转化到code String当中
 			vertexCode = vShaderStream.str();
 			fragmentCode = fShaderStream.str();
+            if(geometryPath != nullptr)
+            {
+                gShaderFile.open(geometryPath);
+                std::stringstream gShaderStream;
+                gShaderStream << gShaderFile.rdbuf();
+                gShaderFile.close();
+                geometryCode = gShaderStream.str();
+            }
 		}
 		catch (std::ifstream::failure& e) {
 			std::cout << "ERROR: Shader File Error: " << e.what() << std::endl;
@@ -63,6 +73,16 @@ public:
 		glCompileShader(fragment);
 		//检查fragment编译结果
 		checkShaderErrors(fragment, "COMPILE");
+
+        unsigned int geometry;
+        if(geometryPath != nullptr)
+        {
+            const char * gShaderCode = geometryCode.c_str();
+            geometry = glCreateShader(GL_GEOMETRY_SHADER);
+            glShaderSource(geometry, 1, &gShaderCode, NULL);
+            glCompileShader(geometry);
+            checkShaderErrors(geometry, "GEOMETRY");
+        }
 		
 		//4 创建一个Program壳子
 		mProgram = glCreateProgram();
@@ -70,6 +90,8 @@ public:
 		//6 将vs与fs编译好的结果放到program这个壳子里
 		glAttachShader(mProgram, vertex);
 		glAttachShader(mProgram, fragment);
+        if(geometryPath != nullptr)
+            glAttachShader(mProgram, geometry);
 
 		//7 执行program的链接操作，形成最终可执行shader程序
 		glLinkProgram(mProgram);
@@ -80,6 +102,8 @@ public:
 		//清理
 		glDeleteShader(vertex);
 		glDeleteShader(fragment);
+        if(geometryPath != nullptr)
+            glDeleteShader(geometry);
 	}
 	~Shader() {
 		glDeleteProgram(mProgram);

@@ -43,6 +43,50 @@ OpenGL仅当3D坐标在3个轴（x、y和z）上-1.0到1.0的范围内时才处�
 一旦你的顶点坐标已经在顶点着色器中处理过，它们就应该是标准化设备坐标了，
 标准化设备坐标是一个x、y和z值在-1.0到1.0的一小段空间。任何落在范围外的坐标都会被丢弃/裁剪，不会显示在你的屏幕上。
 
+### OpenGL 绘制字体
+
+https://freetype.org/
+
+libfreetype.a 依赖于以下库
+
+- Brotli 库
+
+    ```shell
+    sudo apt-get install libbrotli-dev
+    ```
+
+- libpng 库
+
+    ```shell
+    sudo apt-get install libpng-dev
+    ```
+
+- zlib 库
+
+    ```shell
+    sudo apt-get install zlib1g-dev
+    ```
+
+- HarfBuzz 库
+
+    ```shell
+    sudo apt-get install libharfbuzz-dev
+    ```
+
+```c++
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/text_rendering DIR_SRCS)
+add_executable (text_rendering ${DIR_SRCS})
+target_link_libraries(text_rendering PUBLIC glm)
+target_link_libraries(text_rendering PUBLIC glfw)
+target_link_libraries(text_rendering PUBLIC glad)
+target_link_libraries(text_rendering PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libfreetype.a)
+target_link_libraries(text_rendering PUBLIC brotlidec)
+target_link_libraries(text_rendering PUBLIC png)
+target_link_libraries(text_rendering PUBLIC z)
+target_link_libraries(text_rendering PUBLIC harfbuzz)
+```
+
 
 ### 曲率运动
 

@@ -21,7 +21,7 @@ set(CMAKE_BUILD_TYPE Debug)      #Debug
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
 
-set(INCDIRS include imgui .)
+set(INCDIRS include imgui freetype2 .)
 
 foreach(incdir ${INCDIRS})
     include_directories(${incdir})
@@ -705,3 +705,8 @@ add_executable (text_rendering ${DIR_SRCS})
 target_link_libraries(text_rendering PUBLIC glm)
 target_link_libraries(text_rendering PUBLIC glfw)
 target_link_libraries(text_rendering PUBLIC glad)
+target_link_libraries(text_rendering PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libfreetype.a)
+target_link_libraries(text_rendering PUBLIC brotlidec)
+target_link_libraries(text_rendering PUBLIC png)
+target_link_libraries(text_rendering PUBLIC z)
+target_link_libraries(text_rendering PUBLIC harfbuzz)

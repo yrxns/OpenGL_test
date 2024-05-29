@@ -696,3 +696,12 @@ add_executable (shadow_mapping ${DIR_SRCS})
 target_link_libraries(shadow_mapping PUBLIC glm)
 target_link_libraries(shadow_mapping PUBLIC glfw)
 target_link_libraries(shadow_mapping PUBLIC glad)
+
+## text_rendering
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/text_rendering DIR_SRCS)
+add_executable (text_rendering ${DIR_SRCS})
+target_link_libraries(text_rendering PUBLIC glm)
+target_link_libraries(text_rendering PUBLIC glfw)
+target_link_libraries(text_rendering PUBLIC glad)

@@ -678,3 +678,21 @@ add_executable (blinn_phong ${DIR_SRCS})
 target_link_libraries(blinn_phong PUBLIC glm)
 target_link_libraries(blinn_phong PUBLIC glfw)
 target_link_libraries(blinn_phong PUBLIC glad)
+
+## gamma_corre
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/40_gamma_corre DIR_SRCS)
+add_executable (gamma_corre ${DIR_SRCS})
+target_link_libraries(gamma_corre PUBLIC glm)
+target_link_libraries(gamma_corre PUBLIC glfw)
+target_link_libraries(gamma_corre PUBLIC glad)
+
+## shadow_mapping
+set(DIR_SRCS "")
+aux_source_directory(./imgui DIR_SRCS)
+aux_source_directory(./examples/41_shadow_mapping DIR_SRCS)
+add_executable (shadow_mapping ${DIR_SRCS})
+target_link_libraries(shadow_mapping PUBLIC glm)
+target_link_libraries(shadow_mapping PUBLIC glfw)
+target_link_libraries(shadow_mapping PUBLIC glad)
